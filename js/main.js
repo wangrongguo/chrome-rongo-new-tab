@@ -89,7 +89,7 @@ function loadNotes() {
         noteItem.innerHTML = `
             <div class="schedule-time">${note.time}</div>
             <div><strong>${note.title}</strong>: <span class="note-text" title="${note.text}">${note.text.length > 25 ? note.text.substring(0, 25) + '...' : note.text}</span></div>
-            <button class="delete-note-btn" data-index="${index}"><img class="delete-note-btn" src="images/close.png" alt="关闭" style="width: 20px; height: 20px;" /></button>
+            <button class="delete-note-btn" data-index="${index}"><img data-index="${index}" class="delete-note-btn" src="images/close.png" alt="关闭" style="width: 20px; height: 20px;" /></button>
         `;
         scheduleContent.appendChild(noteItem);
     });
@@ -153,7 +153,6 @@ async function fetchWeather() {
         document.getElementById('weather-description').innerText = `天气: ${todayWeather.textDay}`;
         document.getElementById('weather-temperature').innerText = `温度: ${todayWeather.tempMax}°C / ${todayWeather.tempMin}°C`;
         document.getElementById('weather-humidity').innerText = `湿度: ${todayWeather.humidity}%`;
-        document.getElementById('weather-wind').innerText = `风速: ${todayWeather.windSpeedDay} km/h`;
     } else {
         console.error('获取天气数据失败:', data);
     }
