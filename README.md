@@ -26,14 +26,14 @@
 
 1. **下载项目**:
    ```bash
-   git clone https://github.com/yourusername/demo008.git
-   cd demo008
+   git clone https://github.com/wangrongguo/chrome-rongo-new-tab.git
+   cd chrome-rongo-new-tab-main
    ```
 
 2. **加载插件**:
    - 打开 Chrome 浏览器，输入 `chrome://extensions/` 进入扩展程序页面。
    - 开启右上角的 "开发者模式"。
-   - 点击 "加载已解压的扩展程序"，选择项目文件夹 `chrome-new-tab`。
+   - 点击 "加载已解压的扩展程序"，选择项目文件夹 `chrome-rongo-new-tab-main`。
 
 3. **使用插件**:
    - 插件加载后，您将看到美观的背景和时钟功能。
