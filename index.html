@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新标签页</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/calendar.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 左侧导航菜单 -->
+        <div class="nav-menu">
+            <div class="profile">
+                <div class="avatar">祺</div>
+                <div class="profile-info">
+                    <div>祺弄先生</div>
+                </div>
+            </div>
+            <div class="nav-content">
+                <a href="https://www.baidu.com" class="nav-item" target="_blank">
+                    <span class="nav-icon">百</span>
+                    <span>百度</span>
+                </a>
+                <a href="https://weibo.com" class="nav-item" target="_blank">
+                    <span class="nav-icon">微</span>
+                    <span>微博</span>
+                </a>
+                <a href="https://www.toutiao.com" class="nav-item" target="_blank">
+                    <span class="nav-icon">头</span>
+                    <span>头条</span>
+                </a>
+                <a href="https://www.qq.com" class="nav-item" target="_blank">
+                    <span class="nav-icon">腾</span>
+                    <span>腾讯</span>
+                </a>
+                <!-- <a href="#" class="nav-item logout">
+                    <span class="nav-icon">退</span>
+                    <span>Log Out</span>
+                </a> -->
+                
+            </div>
+        </div>
+
+        <!-- 中间内容区 -->
+        <div class="main-content">
+            <div class="time-container">
+                <div class="date-text">2024年12月18日星期三</div>
+                <div class="clock">12:52:00</div>
+            </div>
+
+            <div class="holiday-section">
+                <h3>节假日</h3>
+                <div class="holiday-card" id="new-year-card">
+                    <div class="holiday-icon">元</div>
+                    <div class="holiday-info">
+                        <div>元旦</div>
+                        <div id="new-year-count">距离2025年元旦还有 X 天</div>
+                    </div>
+                </div>
+                <div class="holiday-card" id="spring-festival-card">
+                    <div class="holiday-icon">春</div>
+                    <div class="holiday-info">
+                        <div>春节</div>
+                        <div id="spring-festival-count">距离2025年春节还有 Y 天</div>
+                    </div>
+                </div>
+                <div class="holiday-card" id="qingming-festival-card">
+                    <div class="holiday-icon">清</div>
+                    <div class="holiday-info">
+                        <div>清明节</div>
+                        <div id="qingming-festival-count">距离2025年清明节还有 Z 天</div>
+                    </div>
+                </div>
+                <div class="holiday-card" id="labor-day-card">
+                    <div class="holiday-icon">劳</div>
+                    <div class="holiday-info">
+                        <div>劳动节</div>
+                        <div id="labor-day-count">距离2025年劳动节还有 W 天</div>
+                    </div>
+                </div>
+                <div class="holiday-card" id="duanwu-festival-card">
+                    <div class="holiday-icon">端</div>
+                    <div class="holiday-info">
+                        <div>端午节</div>
+                        <div id="duanwu-festival-count">距离2025年端午节还有 V 天</div>
+                    </div>
+                </div>
+                <div class="holiday-card" id="mid-autumn-festival-card">
+                    <div class="holiday-icon">中</div>
+                    <div class="holiday-info">
+                        <div>中秋节</div>
+                        <div id="mid-autumn-festival-count">距离2025年中秋节还有 U 天</div>
+                    </div>
+                </div>
+                <div class="holiday-card" id="national-day-card">
+                    <div class="holiday-icon">国</div>
+                    <div class="holiday-info">
+                        <div>国庆节</div>
+                        <div id="national-day-count">距离2025年国庆节还有 T 天</div>
+                    </div>
+                </div>
+                <!-- 其他节假日卡片 -->
+            </div>
+
+            <div class="schedule-section">
+                <h3 class="schedule-title">便签</h3>
+                <div class="schedule-header">
+                    <button id="add-note-btn">添加便签</button>
+                </div>
+                <div class="schedule-content" id="schedule-content">
+                    <!-- 便签项将动态添加到这里 -->
+                </div>
+                <button id="show-more-btn" style="display: none;">展开</button>
+                <div id="note-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">
+                            <img src="images/close.png" alt="关闭" style="width: 20px; height: 20px;" />
+                        </span>
+                        <input type="text" id="note-title-input" placeholder="便签标题..." />
+                        <textarea id="note-input" placeholder="添加便签内容..." rows="8"></textarea>
+                        <div>
+                            <button id="save-note-btn">确认</button>
+                            <button id="cancel-note-btn">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+
+        <!-- 右侧日历区域 -->
+        <div class="right-panel">
+            <div class="calendar-container">
+                <div class="calendar-controls">
+                    <select class="calendar-dropdown">
+                        <option>假期</option>
+                        <option>2024年</option>
+                    </select>
+                    <select class="calendar-dropdown">
+                        <option>12月</option>
+                    </select>
+                    <div class="calendar-nav">
+                        <button class="prev-month">&lt;</button>
+                        <button class="next-month">&gt;</button>
+                    </div>
+                    <button class="today-btn">今天</button>
+                </div>
+                
+                <div class="calendar">
+                    <!-- 星期头部 -->
+                    <div class="weekday-header">一</div>
+                    <div class="weekday-header">二</div>
+                    <div class="weekday-header">三</div>
+                    <div class="weekday-header">四</div>
+                    <div class="weekday-header">五</div>
+                    <div class="weekday-header weekend">六</div>
+                    <div class="weekday-header weekend">日</div>
+                    
+                    <!-- 日期单元格示例 -->
+                    <div class="calendar-day">
+                        <span class="solar-date">17</span>
+                        <span class="lunar-date">十七</span>
+                    </div>
+                    <!-- 更多日期单元格 -->
+                </div>
+            </div>
+            <div id="weather-info" style="display: flex; flex-wrap: wrap; gap: 20px;">
+                <div style="flex: 1;">
+                    <p id="weather-date">日期: </p>
+                    <p id="weather-description">天气: </p>
+                </div>
+                <div style="flex: 1;">
+                    <p id="weather-temperature">温度: </p>
+                    <p id="weather-humidity">湿度: </p>
+                </div>
+               
+            </div>
+            
+        </div>
+    </div>
+
+    <script src="lib/chinese-lunar.min.js"></script>
+    <script src="js/calendar.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html> 

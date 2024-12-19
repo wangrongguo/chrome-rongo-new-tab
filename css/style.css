@@ -1,0 +1,380 @@
+:root {
+    --primary-100: #8FBF9F;
+    --primary-200: #68a67d;
+    --primary-300: #24613b;
+    --accent-100: #F18F01;
+    --accent-200: #833500;
+    --text-100: #353535;
+    --text-200: #5f5f5f;
+    --bg-100: #F5ECD7;
+    --bg-200: #E6DCC6;
+    --bg-300: #D4C8B0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Microsoft YaHei', sans-serif;
+    background-color: var(--bg-100);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 主容器样式 */
+.container {
+    width: 1200px;
+    height: 650px;
+    background: var(--bg-100);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 60px 1fr 600px;
+    gap: 0;
+    padding: 20px;
+    position: relative;
+}
+
+/* 左侧导航菜单样式 */
+.nav-menu {
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--bg-200);
+}
+
+.profile {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    background: var(--primary-100);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 5px;
+    font-size: 1em;
+}
+
+.profile-info {
+    font-size: 0.7em;
+    color: var(--text-200);
+}
+
+.nav-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--text-200);
+    text-decoration: none;
+    padding: 8px 0;
+    font-size: 0.75em;
+}
+
+.nav-icon {
+    width: 28px;
+    height: 28px;
+    background: var(--bg-200);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+    font-size: 0.9em;
+    color: var(--text-200);
+}
+
+/* 中间内容区域 */
+.main-content {
+    padding: 20px 30px;
+    max-width: 800px;
+}
+
+.time-container {
+    background-color: var(--primary-100);
+    padding: 12px 20px;
+    border-radius: 8px;
+    color: white;
+    display: inline-block;
+    margin-bottom: 20px;
+    font-size: 3em;
+}
+
+.date-text {
+    font-size: 0.8em;
+    margin-bottom: 4px;
+}
+
+.clock {
+    font-size: 2.5em;
+    /* font-weight: 300; */
+}
+
+/* 节假日卡片样式 */
+.holiday-section {
+    background: var(--bg-200);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.holiday-section h3 {
+    margin: 0 0 12px 0;
+    font-size: 0.85em;
+    color: var(--text-100);
+}
+
+.holiday-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    background: #B87F5D;
+    border-radius: 6px;
+    color: white;
+    margin-bottom: 8px;
+    display: none;
+}
+
+.holiday-icon {
+    width: 28px;
+    height: 28px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+}
+
+.holiday-info {
+    font-size: 0.8em;
+}
+
+/* 便签区域 */
+.schedule-section {
+    background: var(--bg-200);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.schedule-title {
+    font-size: 0.85em;
+    color: var(--text-100);
+    margin: 0 0 12px 0;
+}
+
+.schedule-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.schedule-tab {
+    padding: 5px 12px;
+    background: var(--primary-100);
+    color: white;
+    border-radius: 12px;
+    font-size: 0.75em;
+    cursor: pointer;
+    border: none;
+}
+
+.schedule-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.schedule-item {
+    position: relative;
+    flex: 1 1 calc(33.33% - 8px);
+    padding: 10px 20px;
+    background: #F5ECD7;
+    border-radius: 6px;
+    font-size: 1em;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.schedule-item .note-text {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.schedule-item .note-text:hover {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+}
+
+.schedule-time {
+    color: var(--text-200);
+    font-size: 0.75em;
+    margin-bottom: 4px;
+}
+
+/* 右侧面板样式 */
+.right-panel {
+    width: 568px;
+    padding: 20px 0 20px 30px;
+    border-left: 1px solid var(--bg-200);
+}
+
+.right-panel h1 {
+    font-size: 1.6em;
+    margin: 0 0 20px 0;
+    color: var(--text-100);
+}
+
+/* 便签输入框和按钮样式 */
+#note-input {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid var(--text-200);
+    margin-bottom: 10px;
+    width: 100%;
+    resize: none; /* 禁止调整大小 */
+}
+
+#add-note-btn {
+    padding: 5px 10px;
+    border: none;
+    background: var(--primary-100);
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+
+#add-note-btn:hover {
+    background: var(--primary-200);
+}
+
+/* 模态框样式 */
+.modal {
+    display: none; /* 隐藏模态框 */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 600px;
+    border-radius: 8px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #888;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 便签删除按钮样式 */
+.delete-note-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+
+#note-title-input {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid var(--text-200);
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+#note-input {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid var(--text-200);
+    margin-bottom: 10px;
+    width: 100%;
+    resize: none; /* 禁止调整大小 */
+}
+
+#save-note-btn,
+#cancel-note-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+#save-note-btn {
+    background: var(--primary-100);
+    color: white;
+}
+
+#cancel-note-btn {
+    background: var(--accent-200);
+    color: white;
+}
+
+#save-note-btn:hover {
+    background: var(--primary-200);
+}
+
+#cancel-note-btn:hover {
+    background: var(--accent-100);
+}
+#add-note-btn{
+    margin: 5px;
+}
+
+#show-more-btn {
+    margin-top: 10px;
+    padding: 5px 10px;
+    border: none;
+    background: var(--primary-100);
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#show-more-btn:hover {
+    background: var(--primary-200);
+}
+.holiday{
+    color: brown;
+}
