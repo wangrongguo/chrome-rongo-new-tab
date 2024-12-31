@@ -1,9 +1,15 @@
-const COLORS = ['#E48897','#FBDD79','#EDA0AD','#D7CED7','#C1C5E3','#83C0E5','#9CE0DA','#9FD6A0','#B4D58D','#E0E8F0','#FFC0CD','#C9EBDA','#55BB8A','#A8E4CA','#DCE4A7','#FBCDAE','#A7A7DA'];
+// 定义浅色和深色两组颜色
+const LIGHT_COLORS = ['#E48897','#FBDD79','#EDA0AD','#D7CED7','#C1C5E3','#83C0E5','#9CE0DA','#9FD6A0','#B4D58D','#E0E8F0','#FFC0CD','#C9EBDA','#55BB8A','#A8E4CA','#DCE4A7','#FBCDAE','#A7A7DA'];
+const DARK_COLORS = ['#000000']; // 修改为纯黑色
 
 // 随机背景色
-function setRandomBackground() {
-    const randomColor = COLORS[Math.floor(Math.random() * COLORS.length)];
-    document.body.style.backgroundColor = randomColor;
+function setRandomBackground(theme = 'light') {
+    if (theme === 'dark') {
+        document.body.style.backgroundColor = DARK_COLORS[0];
+    } else {
+        const randomColor = LIGHT_COLORS[Math.floor(Math.random() * LIGHT_COLORS.length)];
+        document.body.style.backgroundColor = randomColor;
+    }
 }
 
 // 更新时钟
@@ -158,15 +164,53 @@ async function fetchWeather() {
     }
 }
 
+// 主题切换功能
+function initThemeToggle() {
+    const themeToggleBtn = document.querySelector('.theme-toggle');
+    const themeIcon = themeToggleBtn.querySelector('i');
+    const themeText = themeToggleBtn.querySelector('span');
+    
+    // 从localStorage获取保存的主题
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeButton(savedTheme);
+    setRandomBackground(savedTheme); // 设置对应主题的背景色
+    
+    themeToggleBtn.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateThemeButton(newTheme);
+        setRandomBackground(newTheme); // 切换主题时更新背景色
+    });
+}
+
+function updateThemeButton(theme) {
+    const themeIcon = document.querySelector('.theme-toggle i');
+    const themeText = document.querySelector('.theme-toggle span');
+    
+    if (theme === 'dark') {
+        themeIcon.className = 'fas fa-moon';
+        themeText.textContent = '切换亮色';
+    } else {
+        themeIcon.className = 'fas fa-sun';
+        themeText.textContent = '切换暗色';
+    }
+}
+
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
-    setRandomBackground();
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setRandomBackground(savedTheme); // 使用保存的主题初始化背景色
     updateClock();
     setInterval(updateClock, 1000);
     loadNotes();
     updateHolidayCountdown();
     fetchWeather(); // 获取天气数据
     setInterval(updateHolidayCountdown, 86400000); // 每天更新一次
+    initThemeToggle(); // 初始化主题切换功能
 });
 
 function updateHolidayCountdown() {
