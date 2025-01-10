@@ -82,7 +82,7 @@ saveNoteBtn.addEventListener('click', () => {
     }
 });
 
-// 获取“更多”按钮
+// 获取"更多"按钮
 const showMoreBtn = document.getElementById('show-more-btn');
 
 // 从本地存储加载便签
@@ -100,7 +100,7 @@ function loadNotes() {
         scheduleContent.appendChild(noteItem);
     });
 
-    // 控制“更多”按钮的显示
+    // 控制"更多"按钮的显示
     if (notes.length > 3) {
         const items = document.querySelectorAll('.schedule-item');
         items.forEach((item, index) => {
@@ -108,9 +108,9 @@ function loadNotes() {
                 item.style.display = 'none'; // 隐藏多余的便签
             }
         });
-        showMoreBtn.style.display = 'block'; // 显示“更多”按钮
+        showMoreBtn.style.display = 'block'; // 显示"更多"按钮
     } else {
-        showMoreBtn.style.display = 'none'; // 隐藏“更多”按钮
+        showMoreBtn.style.display = 'none'; // 隐藏"更多"按钮
     }
 }
 
@@ -349,4 +349,100 @@ function getLunarFestivalDate(year, festival) {
             lunarDate = null;
     }
     return lunarDate; // 返回公历日期
-} 
+}
+
+// 处理动态 GIF 图片的鼠标事件
+const dynamicGif = document.getElementById('dynamic-gif');
+const tooltip = document.querySelector('.tooltip');
+let isClicked = false;
+
+// 每日提示语
+const dailyMessages = {
+    1: [ // 周一
+        "周一：灵魂还在周末，身体已在工位。",
+        "周一的我：重启失败，进入低电量模式。",
+        "周一早上，我和床的爱情故事又上演了生离死别。",
+        "今天的心情和闹钟一样，响得让人崩溃。",
+        "周一：我以为我起得早，结果是闹钟起得早。"
+    ],
+    2: [ // 周二
+        "周二：周一的续集，但依然没有彩蛋。",
+        "周二的我：已经上班一天了，怎么才周二？",
+        "周二：距离周末还有四天，但我的耐心只有两天。",
+        "周二：离周末还很远，但离崩溃很近。",
+        "周二的我，像极了被生活榨干的柠檬。",
+        "周二：努力假装自己是个积极向上的打工人。"
+    ],
+    3: [ // 周三
+        "周三：一周的分水岭，前不着村后不着店。",
+        "周三的我：一半是火焰，一半是海水。",
+        "周三：恭喜你，已经熬过了一半，但另一半还在等你。",
+        "周三：一周的中间，人生的低谷。",
+        "周三：前不着村，后不着店，只能硬着头皮往前走。",
+        "周三的我，已经忘了周末长什么样了。"
+    ],
+    4: [ // 周四
+        "周四：假装周五，骗自己快解脱了。",
+        "周四的我：已经开始计划周末的躺平姿势。",
+        "周四：距离周末只有一步之遥，但这一步好远。",
+        "周四：假装自己还能撑到周五。",
+        "周四：距离周末还有24小时，但感觉像24年。",
+        "周四：身体在上班，灵魂在摸鱼。"
+    ],
+    5: [ // 周五
+        "周五：打工人的曙光，快乐的起点！",
+        "周五的我：表面认真工作，内心已经在蹦迪。",
+        "周五：今天的努力，是为了明天的不努力。",
+        "周五：终于看到了一丝曙光，虽然微弱但足够让我撑下去。",
+        "周五：表面淡定，内心已经在蹦迪。",
+        "周五：今天的我，是周末的预备选手。"
+    ],
+    6: [ // 周六
+        "周六：睡到自然醒，躺到自然饿。",
+        "周六的我：终于可以忘记周一到周五的烦恼。",
+        "周六：今天不努力，明天也不努力，快乐加倍！"
+    ],
+    0: [ // 周日
+        "周日：快乐倒计时，焦虑加载中。",
+        "周日的我：一边享受自由，一边为周一默哀。",
+        "周日：明天是周一，但今天的我还是无敌的！"
+    ]
+};
+
+// 获取当天的随机一条消息
+function getDailyMessage() {
+    const day = new Date().getDay(); // 获取当前是星期几（0-6）
+    const messages = dailyMessages[day];
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    return messages[randomIndex];
+}
+
+// 鼠标悬停事件
+dynamicGif.addEventListener('mouseenter', () => {
+    if (!isClicked) {
+        dynamicGif.src = 'images/IMG_4386.gif';
+    }
+    // 显示提示框
+    tooltip.textContent = getDailyMessage();
+    tooltip.style.display = 'block';
+});
+
+// 鼠标离开事件
+dynamicGif.addEventListener('mouseleave', () => {
+    if (!isClicked) {
+        dynamicGif.src = 'images/IMG_4388.gif';
+    }
+    // 隐藏提示框
+    tooltip.style.display = 'none';
+});
+
+// 鼠标点击事件
+dynamicGif.addEventListener('click', () => {
+    if (!isClicked) {
+        dynamicGif.src = 'images/IMG_4387.gif';
+        isClicked = true;
+    } else {
+        dynamicGif.src = 'images/IMG_4388.gif';
+        isClicked = false;
+    }
+}); 

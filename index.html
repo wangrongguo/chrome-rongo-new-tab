@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/calendar.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script type="module" src="js/model-viewer.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -190,10 +191,15 @@
                     <p id="weather-temperature">温度: </p>
                     <p id="weather-humidity">湿度: </p>
                 </div>
-               
             </div>
             
+            
         </div>
+    </div>
+    <!-- 添加模型显示区域 -->
+    <div id="model-container">
+        <div class="tooltip"></div>
+        <img id="dynamic-gif" src="images/IMG_4388.gif" alt="模型" style="width: 100px; height: 100px; border-radius: 50px; cursor: pointer;">
     </div>
 
     <script src="lib/chinese-lunar.min.js"></script>
