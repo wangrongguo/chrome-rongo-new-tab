@@ -66,7 +66,22 @@ class Calendar {
         this.renderCalendar(); // 重新渲染日历
     }
 
-    renderCalendar() {
+    // 显示日期详情弹窗
+showDateDetail(date, element) {
+    const lunar = chineseLunar.solarToLunar(date); // 引用lib/chinese-lunar.min.js文件进行农历转换
+    const detailHtml = `
+        <div class="date-detail">
+            <h3>${date.toLocaleDateString('zh-CN')}</h3>
+            <p>农历：${chineseLunar.format(lunar,'M')}${element.querySelector('.lunar-date').textContent}</p>
+            <p>星期：${['日','一','二','三','四','五','六'][date.getDay()]}</p>
+        </div>
+    `;
+    
+    element.insertAdjacentHTML('beforeend', detailHtml);
+    setTimeout(() => element.querySelector('.date-detail').remove(), 2000);
+}
+
+renderCalendar() {
         const year = this.currentDate.getFullYear();
         const month = this.currentDate.getMonth();
         const firstDay = new Date(year, month, 1);
@@ -141,53 +156,74 @@ class Calendar {
 
     // 获取节气名称
     getSolarTerm(date) {
-        const terms = [
-            '小寒', '大寒', '立春', '雨水', '惊蛰', '春分', '清明', '谷雨',
-            '立夏', '小满', '芒种', '夏至', '小暑', '大暑', '立秋', '处暑',
-            '白露', '秋分', '寒露', '霜降', '立冬', '小雪', '大雪', '冬至'
-        ];
-        const month = date.getMonth();
-        const day = date.getDate();
-        
-        // 更准确的节气判断，使用固定的节气日期
-        const termDates = [
-            new Date(date.getFullYear(), 0, 5),   // 小寒
-            new Date(date.getFullYear(), 0, 20),  // 大寒
-            new Date(date.getFullYear(), 1, 5),   // 立春
-            new Date(date.getFullYear(), 1, 20),  // 雨水
-            new Date(date.getFullYear(), 2, 5),   // 惊蛰
-            new Date(date.getFullYear(), 2, 20),  // 春分
-            new Date(date.getFullYear(), 3, 5),   // 清明
-            new Date(date.getFullYear(), 3, 20),  // 谷雨
-            new Date(date.getFullYear(), 4, 5),   // 立夏
-            new Date(date.getFullYear(), 4, 20),  // 小满
-            new Date(date.getFullYear(), 5, 5),   // 芒种
-            new Date(date.getFullYear(), 5, 21),  // 夏至
-            new Date(date.getFullYear(), 6, 7),   // 小暑
-            new Date(date.getFullYear(), 6, 22),  // 大暑
-            new Date(date.getFullYear(), 7, 7),   // 立秋
-            new Date(date.getFullYear(), 7, 22),  // 处暑
-            new Date(date.getFullYear(), 8, 7),   // 白露
-            new Date(date.getFullYear(), 8, 22),  // 秋分
-            new Date(date.getFullYear(), 9, 8),   // 寒露
-            new Date(date.getFullYear(), 9, 23),  // 霜降
-            new Date(date.getFullYear(), 10, 7),  // 立冬
-            new Date(date.getFullYear(), 10, 22), // 小雪
-            new Date(date.getFullYear(), 11, 7),  // 大雪
-            new Date(date.getFullYear(), 11, 21)  // 冬至
+        const solarTerms = [
+            {name: '小寒', month: 0, c: 3.87},
+            {name: '大寒', month: 0, c: 18.73},
+            {name: '立春', month: 1, c: 3.87},
+            {name: '雨水', month: 1, c: 18.73},
+            {name: '惊蛰', month: 2, c: 5.63},
+            {name: '春分', month: 2, c: 20.64},
+            {name: '清明', month: 3, c: 4.81},
+            {name: '谷雨', month: 3, c: 20.07},
+            {name: '立夏', month: 4, c: 5.52},
+            {name: '小满', month: 4, c: 21.04},
+            {name: '芒种', month: 5, c: 5.678},
+            {name: '夏至', month: 5, c: 21.37},
+            {name: '小暑', month: 6, c: 7.108},
+            {name: '大暑', month: 6, c: 22.83},
+            {name: '立秋', month: 7, c: 7.5},
+            {name: '处暑', month: 7, c: 23.13},
+            {name: '白露', month: 8, c: 7.62},
+            {name: '秋分', month: 8, c: 23.17},
+            {name: '寒露', month: 9, c: 8.32},
+            {name: '霜降', month: 9, c: 23.42},
+            {name: '立冬', month: 10, c: 7.32},
+            {name: '小雪', month: 10, c: 22.28},
+            {name: '大雪', month: 11, c: 7.18},
+            {name: '冬至', month: 11, c: 21.94}
         ];
 
-        const currentDate = new Date(date.getFullYear(), month, day);
-        for (let i = 0; i < termDates.length; i++) {
-            if (currentDate.getTime() === termDates[i].getTime()) {
-                return terms[i];
+        const year = date.getFullYear();
+        const y = year % 100; // 取年份后两位
+        const l = Math.floor(y / 4); // 闰年修正值
+
+        // 计算当前日期是否匹配节气
+        for (const term of solarTerms) {
+            const d = 0.2422;
+            // 计算公式 [Y×D+C]−L
+            const day = Math.floor(y * d + term.c) - l;
+            
+            // 处理跨年节气（如小寒可能在上年12月）
+            const termMonth = term.month;
+            const termYear = termMonth < date.getMonth() ? year - 1 : year;
+            
+            if (date.getMonth() === termMonth && date.getDate() === day) {
+                return term.name;
             }
         }
+
+        // 创建当前循环日期对象
+        // 参数说明：
+        // 1. date.getFullYear() - 取自当前处理的日期年份
+        // 2. date.getMonth() - 取自当前处理的日期月份（0-11）
+        // 3. dayNumber - 当前处理的当月日期数字（1-31）
+        // 用途：生成用于节气匹配的日期实例
+        // 后续逻辑：将遍历预定义节气列表，匹配月份和日期是否相符
         return null;
     }
 }
 
 // 初始化日历
 document.addEventListener('DOMContentLoaded', () => {
-    new Calendar();
+    const calendar = new Calendar();
+    
+    // 添加日期点击事件
+    calendar.calendarContainer.addEventListener('click', (e) => {
+        const dayElement = e.target.closest('.calendar-day');
+        if (dayElement && !dayElement.classList.contains('other-month')) {
+            const date = new Date(calendar.currentDate);
+            date.setDate(parseInt(dayElement.querySelector('.solar-date').textContent));
+            calendar.showDateDetail(date, dayElement);
+        }
+    });
 });
