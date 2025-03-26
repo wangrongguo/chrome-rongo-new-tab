@@ -247,9 +247,38 @@ body {
 
 /* 右侧面板样式 */
 .right-panel {
-    width: 568px;
+    width: 100%;
+    max-width: 568px;
     padding: 20px 0 20px 30px;
     border-left: 1px solid var(--bg-200);
+    box-sizing: border-box;
+}
+
+@media (max-width: 1200px) {
+    .container {
+        grid-template-columns: 60px 1fr;
+    }
+    
+    .right-panel {
+        display: none;
+    }
+}
+
+@media (min-width: 1201px) and (max-width: 1600px) {
+    .container {
+        grid-template-columns: 60px 1fr 40%;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+        padding: 10px;
+    }
+    
+    .nav-menu {
+        display: none;
+    }
 }
 
 .right-panel h1 {
