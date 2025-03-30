@@ -39,12 +39,12 @@ body {
 
 /* 主容器样式 */
 .container {
-    height: 666px;
+    max-height: 666px;
     background: var(--bg-100);
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     display: grid;
-    grid-template-columns: 60px 1fr 600px;
+    grid-template-columns: 60px 586px 600px;
     gap: 0;
     padding: 20px;
     position: relative;
@@ -121,7 +121,7 @@ body {
     padding: 12px 20px;
     border-radius: 8px;
     color: white;
-    display: inline-block;
+    /* display: inline-block; */
     margin-bottom: 20px;
     font-size: 3.7em;
     text-align: center;
@@ -134,7 +134,8 @@ body {
 
 .clock {
     font-size: 2.5em;
-    /* font-weight: 300; */
+    width: 200px;
+    font-weight: 900;
 }
 
 /* 节假日卡片样式 */
@@ -254,11 +255,16 @@ body {
     box-sizing: border-box;
 }
 
+/* 中等屏幕响应式布局（≤1200px）
+   1. 调整容器为两列布局（导航栏+主内容）
+   2. 隐藏右侧面板以优化空间利用 */
 @media (max-width: 1200px) {
     .container {
-        grid-template-columns: 60px 1fr;
+        grid-template-columns: 60px 586px;
     }
-    
+    .clock {
+        font-size: 2.5em;
+    }
     .right-panel {
         display: none;
     }
@@ -266,13 +272,13 @@ body {
 
 @media (min-width: 1201px) and (max-width: 1600px) {
     .container {
-        grid-template-columns: 60px 1fr 40%;
+        grid-template-columns: 60px 586px 40%; /* 中等宽屏布局（1201-1600px）保持三栏结构，右侧面板使用40%自适应宽度 */
     }
 }
 
 @media (max-width: 768px) {
     .container {
-        grid-template-columns: 1fr;
+        grid-template-columns: 586px; /* 小屏布局（≤768px），导航栏和主内容合并为一列 */;
         padding: 10px;
     }
     
