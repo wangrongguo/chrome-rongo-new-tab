@@ -39,13 +39,16 @@ class Calendar {
     }
 
     changeMonth(delta) {
+        
+        // 先将日期设置为1号避免跨月日期溢出
+        this.currentDate.setDate(1);
         this.currentDate.setMonth(this.currentDate.getMonth() + delta);
         
-        // 更新下拉框的值
-        this.monthSelect.value = this.currentDate.getMonth() + 1; // 设置为当前月份
-        this.yearSelect.value = this.currentDate.getFullYear(); // 设置为当前年份
         
-        // 重新渲染日历
+        this.monthSelect.value = this.currentDate.getMonth() + 1;
+        this.yearSelect.value = this.currentDate.getFullYear();
+        
+        
         this.updateCalendar();
     }
 
