@@ -95,7 +95,7 @@
     position: absolute;
     top: 2px;
     right: 2px;
-    background: #ee3f4d;
+    background: #f27635;
     color: white;
     font-size: 0.6em;
     width: 16px;
@@ -234,8 +234,8 @@
 }
 
 .checkbox-container input:checked ~ .checkmark {
-    background: var(--accent-100);
-    border-color: var(--accent-100);
+    background: #96c24e;
+    border-color: #96c24e;
 }
 
 .checkmark:after {
