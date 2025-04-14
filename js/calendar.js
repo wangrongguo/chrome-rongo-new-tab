@@ -105,7 +105,7 @@ class Calendar {
     `;
 
         element.insertAdjacentHTML('beforeend', detailHtml);
-        setTimeout(() => element.querySelector('.date-detail').remove(), 2000); // 延长弹窗显示时间到5秒
+        setTimeout(() => element.querySelector('.date-detail').remove(), 10000); // 延长弹窗显示时间到10秒
 
 
     }
@@ -140,7 +140,7 @@ class Calendar {
                     const holidayClass = (festival || solarTerm) ? 'holiday' : '';
 
                     // 检查是否存在提醒事项
-                    const hasReminder = JSON.parse(localStorage.getItem('notes') || '[]').some(note => {
+                    const hasReminder = JSON.parse(localStorage.getItem('notes') || '[]').filter(note => {
                         const reminderDate = new Date(note.reminder);
                         return reminderDate.getFullYear() === date.getFullYear() &&
                             reminderDate.getMonth() === date.getMonth() &&
@@ -149,7 +149,7 @@ class Calendar {
 
                     calendarHTML += `
                         <div class="calendar-day ${holidayClass}${isToday ? ' today' : ''}${isWeekend ? ' weekend' : ''}">
-                            ${hasReminder ? '<span class="reminder-marker">有</span>' : ''}
+                            ${hasReminder.length > 0 ? '<span class="reminder-marker">'+hasReminder.length+'</span>' : ''}
                             <span class="solar-date">${dayNumber}</span>
                             <span class="lunar-date">${festival || solarTerm || chineseLunar.format(lunar, 'D') || '无农历'}</span>
                         </div>

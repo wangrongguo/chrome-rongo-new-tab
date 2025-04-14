@@ -118,7 +118,7 @@ body {
 
 .time-container {
     background-color: var(--primary-100);
-    padding: 12px 20px;
+    padding: 12px 0px;
     border-radius: 8px;
     color: white;
     /* display: inline-block; */
