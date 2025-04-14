@@ -189,7 +189,6 @@ body {
 .schedule-title {
     font-size: 0.85em;
     color: var(--text-100);
-    margin: 0 0 12px 0;
 }
 
 .schedule-tabs {
