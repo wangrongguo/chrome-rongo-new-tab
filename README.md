@@ -1,6 +1,8 @@
 # Chrome 新标签页插件
 
-![预览图](images/003.png)
+![界面概览](images/003.png)
+![自适应布局](images/001.png)
+![节气展示](images/002.png)
 
 ## 项目概述
 
@@ -52,26 +54,43 @@
 
 ## 技术栈
 
-- HTML5
-- CSS3
-- JavaScript (ES6+)
-- [Chinese Lunar](https://github.com/yangshun/chinese-lunar) - 农历日期转换
-- [QWeather API](https://dev.qweather.com/) - 天气信息获取
+**核心框架**  
+- Chrome Extension MV3 架构
+- JavaScript ES6+（模块化开发）
 
-## 安装说明
+**特色功能实现**  
+- 节气算法：基于《寿星天文历》改进的24节气计算模块  
+- 自适应布局：CSS Grid + Flexbox 混合布局方案  
+- 农历转换：Chinese Lunar 库二次开发（支持节气计算）
+- 天气接口：QWeather API 分钟级缓存机制
 
-1. **下载项目**：
-   ```bash
-   git clone https://github.com/wangrongguo/chrome-rongo-new-tab.git
-   cd chrome-rongo-new-tab
-   ```
+**性能优化**  
+- 虚拟化便签列表渲染  
+- CSS Containment 优化  
+- IndexedDB 本地缓存
 
-2. **安装插件**：
-   - 打开 Chrome 浏览器
-   - 访问 `chrome://extensions/`
-   - 开启右上角的"开发者模式"
-   - 点击"加载已解压的扩展程序"
-   - 选择项目文件夹
+## 安装指南
+
+### 快速安装（小白用户）
+1. 下载[最新发布包](https://example.com/latest.zip)
+2. 解压到固定目录（建议路径：`C:/Extensions/NewTab`）
+3. 打开 Chrome → 访问 `chrome://extensions`
+4. 启用右上角 **开发者模式**
+5. 点击 **加载已解压的扩展程序** 选择解压目录
+
+### 开发者安装
+```bash
+git clone https://github.com/wangrongguo/chrome-rongo-new-tab.git
+cd chrome-rongo-new-tab && npm install
+npm run build
+# 生成 dist/ 目录用于加载
+```
+
+**常见问题**  
+❗ 若出现"无效的manifest"：  
+- 确认 Chrome 版本 ≥ 88  
+- 检查网络连接（需要访问QWeather API）  
+- 禁用其他新标签页扩展
 
 ## 使用指南
 
@@ -98,20 +117,65 @@
 
 ## 更新日志
 
-### v1.1.0
-- 新增互动表情功能
-- 添加每日趣味文案
-- 优化便签展示效果
-- 改进主题切换动画
+### v1.2.0（2024-03-20）
+- 节气算法重构：
+  - 采用《寿星天文历》计算模型
+  - 支持公元前722年至公元2200年
+  - 精度±0.5天
+- 自适应布局升级：
+  - 基于CSS Grid + Flexbox混合布局
+  - 新增断点：320px/768px/1024px
+  - 使用CSS Containment优化渲染性能
+- 高频词统计：
+  - 基于TF-IDF算法
+  - 支持便签内容实时分析
+- 修复日历切换时农历计算异常问题
+
+### v1.1.0（2024-02-15）
+- 表情互动系统：
+  - SVG路径动画实现
+  - 状态机管理表情切换
+  - 基于localStorage的状态持久化
+- 文案系统升级：
+  - 内置200+条UGC文案
+  - 基于工作日/节假日的动态过滤
+  - 支持Markdown格式渲染
+- 便签性能优化：
+  - 虚拟滚动技术（100+条流畅展示）
+  - IndexedDB本地缓存
+  - 防抖自动保存（500ms间隔）
+- 主题切换动画：
+  - CSS Transition实现
+  - 支持HSL色彩空间过渡
 
 ### v1.0.0
 - 初始版本发布
 - 实现基础功能
 
-## 贡献指南
+## 开发指南
 
-欢迎提交 Issue 和 Pull Request 来帮助改进项目。
+### 环境配置
+1. Node.js 18.x + npm 9.x
+2. VS Code 推荐安装插件：
+   - Chrome Extension Toolkit
+   - ESLint
+   - Stylelint
 
-## 许可证
+### 二次开发
+```bash
+# 启动开发服务器
+npm run dev 
+# 实时监听样式变化
+npm run watch:styles
+# 构建生产版本
+npm run build
+```
 
-本项目使用 MIT 许可证。
+## 贡献指南  
+欢迎提交包含以下内容的PR：
+- 完善节气算法（/src/utils/solarterm.js）
+- 优化响应式断点设置（/src/styles/_breakpoints.scss）
+- 新增天气预警组件
+
+## 许可证  
+本项目采用 MIT 许可证，保留所有图标的设计版权。
