@@ -39,7 +39,7 @@ body {
 
 /* 主容器样式 */
 .container {
-    min-height: 666px;
+    max-height: 666px;
     background: var(--bg-100);
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -133,7 +133,7 @@ body {
 }
 
 .clock {
-    font-size: 2.5em;
+    font-size: 2.7em;
     width: 200px;
     font-weight: 900;
 }
@@ -224,6 +224,16 @@ body {
     margin-bottom: 10px;
     box-sizing: border-box;
     overflow: hidden;
+
+    .note-checkbox {
+        margin-right: 8px;
+        cursor: pointer;
+    }
+
+    .note-checkbox:hover {
+        accent-color: var(--primary-100);
+        outline: 2px solid var(--primary-200);
+    }
 }
 
 .schedule-item .note-text {
@@ -241,8 +251,10 @@ body {
 }
 
 .schedule-time {
-    color: var(--text-200);
-    font-size: 0.75em;
+    color: var(--primary-200);
+    font-size: 0.7em;
+    font-weight: 500;
+    margin-bottom: 4px;
     margin-bottom: 4px;
 }
 
@@ -263,7 +275,7 @@ body {
         grid-template-columns: 60px 586px;
     }
     .clock {
-        font-size: 2.5em;
+        font-size: 2.7em;
     }
     .right-panel {
         display: none;
@@ -363,6 +375,16 @@ body {
     color: #888;
     cursor: pointer;
     font-size: 0.8em;
+
+    img {
+        width: 18px;
+        height: 18px;
+        opacity: 0.7;
+    }
+
+    &:hover img {
+        opacity: 1;
+    }
 }
 
 #note-title-input {
@@ -408,18 +430,26 @@ body {
 #cancel-note-btn:hover {
     background: var(--accent-100);
 }
-#add-note-btn{
-    margin: 5px;
+.schedule-header {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+}
+
+#add-note-btn,
+#show-more-btn {
+    margin: 5px 0;
 }
 
 #show-more-btn {
-    margin-top: 10px;
     padding: 5px 10px;
     border: none;
     background: var(--primary-100);
     color: white;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 0.8em;
 }
 
 #show-more-btn:hover {
@@ -509,4 +539,13 @@ model-viewer {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+.reminder-picker{
+    margin: 0 0 10px 0;
+}
+
+.schedule-item.expired {
+  background-color: #f0f0f0;
+  opacity: 0.7;
 }

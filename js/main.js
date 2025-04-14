@@ -38,7 +38,9 @@ function updateClock() {
 // 获取便签内容的 DOM 元素
 const scheduleContent = document.getElementById('schedule-content');
 const noteInput = document.getElementById('note-input');
-const noteTitleInput = document.getElementById('note-title-input'); // 新增标题输入框
+const noteTitleInput = document.getElementById('note-title-input');
+const dateInput = document.getElementById('reminder-date');
+const timeInput = document.getElementById('reminder-time');
 const addNoteBtn = document.getElementById('add-note-btn');
 
 // 获取模态框和相关元素
@@ -67,18 +69,39 @@ saveNoteBtn.addEventListener('click', () => {
     const noteText = noteInput.value.trim();
     const noteTitle = noteTitleInput.value.trim(); // 获取标题
     if (noteText && noteTitle) {
-        const notes = JSON.parse(localStorage.getItem('notes')) || [];
-        
-        // 获取当前时间并格式化为 YYYY-MM-DD HH:mm:ss
         const now = new Date();
+        const notes = JSON.parse(localStorage.getItem('notes')) || [];
         const formattedTime = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
         
-        notes.push({ title: noteTitle, text: noteText, time: formattedTime });
+        notes.push({ 
+            title: noteTitle, 
+            text: noteText, 
+            time: formattedTime,
+            completed: false,
+            reminder: `${dateInput.value} ${timeInput.value}`
+            });
+        // 获取当前时间并格式化为 YYYY-MM-DD HH:mm:ss
+        const today = new Date(Date.now() - 86400000);
+        today.setHours(23, 59, 59, 999);
+        // 优化排序逻辑：未过期按时间排序，过期置后
+        notes.sort((a, b) => {
+            const aDate = new Date(a.reminder);
+            const bDate = new Date(b.reminder);
+            const aExpired = aDate < today;
+            const bExpired = bDate < today;
+
+            if (aExpired && !bExpired) return 1;
+            if (!aExpired && bExpired) return -1;
+            return aDate - bDate;
+        });
         localStorage.setItem('notes', JSON.stringify(notes));
         loadNotes();
         noteInput.value = ''; // 清空输入框
         noteTitleInput.value = ''; // 清空标题输入框
         noteModal.style.display = 'none'; // 关闭模态框
+        // 新增刷新页面功能
+        window.location.reload();
+        
     }
 });
 
@@ -88,14 +111,35 @@ const showMoreBtn = document.getElementById('show-more-btn');
 // 从本地存储加载便签
 function loadNotes() {
     const notes = JSON.parse(localStorage.getItem('notes')) || [];
+    // 获取当前时间并格式化为 YYYY-MM-DD HH:mm:ss
+    const now = new Date(Date.now() - 86400000);
+    now.setHours(23, 59, 59, 999);
+    // 优化排序逻辑：未过期按时间排序，过期置后
+    notes.sort((a, b) => {
+        const aDate = new Date(a.reminder);
+        const bDate = new Date(b.reminder);
+        const aExpired = aDate < now;
+        const bExpired = bDate < now;
+
+        if (aExpired && !bExpired) return 1;
+        if (!aExpired && bExpired) return -1;
+        return aDate - bDate;
+    });
     scheduleContent.innerHTML = '';
     notes.forEach((note, index) => {
         const noteItem = document.createElement('div');
-        noteItem.className = 'schedule-item';
+        const noteDate = new Date(note.reminder);
+        noteDate.setHours(0, 0, 0, 0); // 保持提醒日期的0点
+        const today = new Date(Date.now() - 86400000);
+        today.setHours(23, 59, 59, 999);
+        const isExpired = noteDate < today;
+        noteItem.className = `schedule-item ${isExpired ? 'expired' : ''}`;
         noteItem.innerHTML = `
-            <div class="schedule-time">${note.time}</div>
-            <div><strong>${note.title}</strong>: <span class="note-text" title="${note.text}">${note.text.length > 25 ? note.text.substring(0, 25) + '...' : note.text}</span></div>
-            <button class="delete-note-btn" data-index="${index}"><img data-index="${index}" class="delete-note-btn" src="images/close.png" alt="关闭" style="width: 20px; height: 20px;" /></button>
+            <div class="schedule-time">${note.reminder}</div>
+            <div>
+                <div><strong>${new Date(note.reminder) < today ? '' : `<input type="checkbox" ${note.completed ? 'checked' : ''} class="note-checkbox" data-index="${index}">`}${note.title}</strong>: <span class="note-text ${note.completed ? 'completed' : ''}" title="${note.text}">${note.text.substring(0,25)}</span></div>
+            </div>
+            <button class="delete-note-btn" data-index="${index}"><img data-index="${index}" class="delete-note-btn" src="images/close.png" alt="关闭" /></button>
         `;
         scheduleContent.appendChild(noteItem);
     });
@@ -199,6 +243,9 @@ function updateThemeButton(theme) {
         themeText.textContent = '切换暗色';
     }
 }
+
+// 监听存储变化
+window.addEventListener('storage', () => loadNotes());
 
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
@@ -445,4 +492,44 @@ dynamicGif.addEventListener('click', () => {
         dynamicGif.src = 'images/IMG_4388.gif';
         isClicked = false;
     }
-}); 
+});
+
+/**
+ * 获取本地日期的 ISO 格式字符串，将日期转换为本地时间的 ISO 格式并分割日期和时间部分。
+ * @param {Date} date - 要转换的日期对象。
+ * @returns {Array<string>} - 包含本地日期和时间的数组，索引 0 为日期，索引 1 为时间。
+ */
+function getLocalISODate(date) {
+    // 计算时区偏移量（分钟）转换为毫秒
+    const offset = date.getTimezoneOffset() * 60000; 
+    // 通过减去时区偏移量来修正日期，得到本地时间
+    const adjustedDate = new Date(date - offset);    
+    // 将修正后的日期转换为 ISO 格式字符串，并按 'T' 分割，返回包含日期和时间的数组
+    return adjustedDate.toISOString().split('T'); 
+}
+// 监听 DOM 内容加载完成事件
+window.addEventListener('DOMContentLoaded', () => {
+    // 调用 getLocalISODate 函数获取当前日期的本地 ISO 格式字符串数组
+    const dateStr = getLocalISODate(new Date());
+    // 在控制台打印获取到的日期字符串数组
+    console.log(dateStr)
+
+    // 将日期部分设置到 id 为 'reminder-date' 的输入框中
+    document.getElementById('reminder-date').value = dateStr[0];
+    // 将默认时间 '00:00' 设置到 id 为 'reminder-time' 的输入框中
+    document.getElementById('reminder-time').value = '00:00';
+});
+
+// 添加复选框事件监听
+scheduleContent.addEventListener('change', (e) => {
+    if (e.target.classList.contains('note-checkbox')) {
+        const index = e.target.dataset.index;
+        const notes = JSON.parse(localStorage.getItem('notes')) || [];
+        notes[index].completed = e.target.checked;
+        localStorage.setItem('notes', JSON.stringify(notes));
+        console.log(notes,e.target.checked,e.target.dataset.index)
+        // e.target.nextElementSibling.classList.toggle('completed');
+        // 新增刷新页面功能
+        // window.location.reload();
+    }
+});

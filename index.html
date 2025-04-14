@@ -123,11 +123,12 @@
                 <h3 class="schedule-title">便签</h3>
                 <div class="schedule-header">
                     <button id="add-note-btn">添加便签</button>
+                    <button id="show-more-btn" style="display: none;">展开</button>
                 </div>
                 <div class="schedule-content" id="schedule-content">
                     <!-- 便签项将动态添加到这里 -->
                 </div>
-                <button id="show-more-btn" style="display: none;">展开</button>
+                
                 <div id="note-modal" class="modal">
                     <div class="modal-content">
                         <span class="close">
@@ -135,6 +136,10 @@
                         </span>
                         <input type="text" id="note-title-input" placeholder="便签标题..." />
                         <textarea id="note-input" placeholder="添加便签内容..." rows="8"></textarea>
+                        <div class="reminder-picker">
+                          <input type="date" id="reminder-date">
+                          <input type="time" id="reminder-time">
+                        </div>
                         <div>
                             <button id="save-note-btn">确认</button>
                             <button id="cancel-note-btn">取消</button>
@@ -206,4 +211,4 @@
     <script src="js/calendar.js"></script>
     <script src="js/main.js"></script>
 </body>
-</html> 
+</html>

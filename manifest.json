@@ -3,6 +3,9 @@
   "name": "智能新标签页",
   "version": "1.0",
   "description": "一个美观实用的新标签页替代品",
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
   "permissions": ["storage"],
   "chrome_url_overrides": {
     "newtab": "index.html"
@@ -12,4 +15,4 @@
     "48": "images/icon48.png",
     "128": "images/icon128.png"
   }
-} 
+}

@@ -91,6 +91,22 @@
     color: var(--text-100);
 }
 
+.reminder-marker {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: #ff4444;
+    color: white;
+    font-size: 0.6em;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
 /* 农历日期 */
 .calendar-day .lunar-date {
     font-size: 0.7em;
@@ -107,7 +123,7 @@
     content: '今';
     position: absolute;
     top: 2px;
-    right: 2px;
+    left: 2px;
     font-size: 0.6em;
     color: var(--primary-100);
 }
@@ -139,19 +155,112 @@
 
 /* 日期详情弹窗 */
 .date-detail {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     position: absolute;
+    z-index: 100;
+    min-width: 240px;
     bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
-    background: white;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 100;
-    min-width: 200px;
     display: none;
+}
+
+.notes-section {
+    margin-top: 12px;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+}
+
+.note-item {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 8px;
+    margin: 6px 0;
+}
+
+.note-item strong {
+    color: #2c3e50;
+    font-size: 0.9em;
+}
+
+.note-content {
+    color: #7f8c8d;
+    font-size: 0.85em;
+    margin: 4px 0 0 0;
+    word-break: break-word;
+    white-space: pre-wrap;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.note-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.note-content::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 2px;
 }
 
 .calendar-day:hover .date-detail {
     display: block;
-} 
+}
+
+/* 复选框样式 */
+.checkbox-container {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.checkbox-container input[type="checkbox"] {
+    opacity: 0;
+    position: absolute;
+    cursor: pointer;
+}
+
+.checkmark {
+    position: relative;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: var(--bg-100);
+    border: 1px solid var(--text-200);
+    border-radius: 3px;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+    background: var(--accent-100);
+    border-color: var(--accent-100);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 5px;
+    top: 2px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* 添加复选框完成状态样式 */
+.completed {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+.note-checkbox {
+    margin-right: 8px;
+    cursor: pointer;
+}
