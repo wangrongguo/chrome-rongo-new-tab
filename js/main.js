@@ -1,5 +1,10 @@
+// 导入calendar模块
+import { Calendar } from './calendar.js';
+
+// 初始化日历实例
+const calendar = new Calendar();
+
 // 定义浅色和深色两组颜色
-// 原代码中存在中文逗号，将其替换为英文逗号以修复无效字符问题
 const LIGHT_COLORS = ['#f8d86a','#bacf65','#b9dec9','#5698c3','#f9cb8b','#dfecd5','#E48897','#FBDD79','#EDA0AD','#D7CED7','#C1C5E3','#83C0E5','#9CE0DA','#9FD6A0','#B4D58D','#E0E8F0','#FFC0CD','#C9EBDA','#55BB8A','#A8E4CA','#DCE4A7','#FBCDAE','#A7A7DA','#E4A7DA','#f7f4ed','#F5ECD7','#ccccd6','#a4cab6'];
 const DARK_COLORS = ['#000000']; // 修改为纯黑色
 
@@ -101,7 +106,8 @@ saveNoteBtn.addEventListener('click', () => {
         noteTitleInput.value = ''; // 清空标题输入框
         noteModal.style.display = 'none'; // 关闭模态框
         // 新增刷新页面功能
-        window.location.reload();
+        // window.location.reload();
+        calendar.renderCalendar(); // 重新渲染日历
         
     }
 });
@@ -168,6 +174,7 @@ scheduleContent.addEventListener('click', (e) => {
             notes.splice(index, 1);
             localStorage.setItem('notes', JSON.stringify(notes));
             loadNotes();
+            calendar.renderCalendar(); // 重新渲染日历
         }
     }
 });

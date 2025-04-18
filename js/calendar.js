@@ -1,4 +1,4 @@
-class Calendar {
+export class Calendar {
     constructor() {
         this.currentDate = new Date();
         this.calendarContainer = document.querySelector('.calendar');
