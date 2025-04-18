@@ -176,6 +176,9 @@ body {
 }
 
 .holiday-info {
+    font-size: 1.5em;
+}
+.holiday-info-mini {
     font-size: 0.8em;
 }
 

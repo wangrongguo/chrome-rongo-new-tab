@@ -1,11 +1,12 @@
 // 导入calendar模块
 import { Calendar } from './calendar.js';
+// 导入HolidayManager模块
 
 // 初始化日历实例
 const calendar = new Calendar();
 
 // 定义浅色和深色两组颜色
-const LIGHT_COLORS = ['#f8d86a','#bacf65','#b9dec9','#5698c3','#f9cb8b','#dfecd5','#E48897','#FBDD79','#EDA0AD','#D7CED7','#C1C5E3','#83C0E5','#9CE0DA','#9FD6A0','#B4D58D','#E0E8F0','#FFC0CD','#C9EBDA','#55BB8A','#A8E4CA','#DCE4A7','#FBCDAE','#A7A7DA','#E4A7DA','#f7f4ed','#F5ECD7','#ccccd6','#a4cab6'];
+const LIGHT_COLORS = ['#f8d86a', '#bacf65', '#b9dec9', '#5698c3', '#f9cb8b', '#dfecd5', '#E48897', '#FBDD79', '#EDA0AD', '#D7CED7', '#C1C5E3', '#83C0E5', '#9CE0DA', '#9FD6A0', '#B4D58D', '#E0E8F0', '#FFC0CD', '#C9EBDA', '#55BB8A', '#A8E4CA', '#DCE4A7', '#FBCDAE', '#A7A7DA', '#E4A7DA', '#f7f4ed', '#F5ECD7', '#ccccd6', '#a4cab6'];
 const DARK_COLORS = ['#000000']; // 修改为纯黑色
 
 // 随机背景色
@@ -28,7 +29,7 @@ function checkShowMoreButtonStatus() {
     const isExpanded = showMoreBtn?.textContent === '收起'; // 判断当前是否为展开状态
     if (notes.length > 3) {
         showMoreBtn.style.display = 'block';
-        
+
     } else {
         showMoreBtn.style.display = 'none';
     }
@@ -53,22 +54,22 @@ function checkShowMoreButtonStatus() {
 // 更新时钟
 function updateClock() {
     const now = new Date();
-    const timeString = now.toLocaleTimeString('zh-CN', { 
+    const timeString = now.toLocaleTimeString('zh-CN', {
         hour12: false,
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit'
     });
-    
+
     const clockElement = document.querySelector('.clock');
     const dateElement = document.querySelector('.date-text');
-    
+
     if (clockElement) {
         clockElement.textContent = timeString;
     }
-    
+
     if (dateElement) {
-        const dateString = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日星期${['日','一','二','三','四','五','六'][now.getDay()]}`;
+        const dateString = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日星期${['日', '一', '二', '三', '四', '五', '六'][now.getDay()]}`;
         dateElement.textContent = dateString;
     }
 }
@@ -110,14 +111,14 @@ saveNoteBtn.addEventListener('click', () => {
         const now = new Date();
         const notes = JSON.parse(localStorage.getItem('notes')) || [];
         const formattedTime = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
-        
-        notes.push({ 
-            title: noteTitle, 
-            text: noteText, 
+
+        notes.push({
+            title: noteTitle,
+            text: noteText,
             time: formattedTime,
             completed: false,
             reminder: `${dateInput.value} ${timeInput.value}`
-            });
+        });
         // 获取当前时间并格式化为 YYYY-MM-DD HH:mm:ss
         const today = new Date(Date.now() - 86400000);
         today.setHours(23, 59, 59, 999);
@@ -141,7 +142,7 @@ saveNoteBtn.addEventListener('click', () => {
         // window.location.reload();
         calendar.renderCalendar(); // 重新渲染日历
         checkShowMoreButtonStatus(); // 检查并更新 "更多" 按钮状态-保持内容的展开或关闭状态
-        
+
     }
 });
 
@@ -177,7 +178,7 @@ function loadNotes() {
         noteItem.innerHTML = `
             <div class="schedule-time">${note.reminder}</div>
             <div>
-                <div><strong>${new Date(note.reminder) < today ? '' : `<input type="checkbox" ${note.completed ? 'checked' : ''} class="rili-checkbox" data-index="${index}">`}${note.title}</strong>: <span class="note-text ${note.completed ? 'completed' : ''}" title="${note.text}">${note.text.substring(0,25)}</span></div>
+                <div><strong>${new Date(note.reminder) < today ? '' : `<input type="checkbox" ${note.completed ? 'checked' : ''} class="rili-checkbox" data-index="${index}">`}${note.title}</strong>: <span class="note-text ${note.completed ? 'completed' : ''}" title="${note.text}">${note.text.substring(0, 25)}</span></div>
             </div>
             <button class="delete-note-btn" data-index="${index}"><img data-index="${index}" class="delete-note-btn" src="images/close.png" alt="关闭" /></button>
         `;
@@ -228,7 +229,7 @@ showMoreBtn.addEventListener('click', () => {
 async function fetchWeather() {
     const response = await fetch('https://devapi.qweather.com/v7/weather/7d?location=101010100&key=a09a9fa8494440839cdc4c824b6e002d');
     const data = await response.json();
-    
+
     if (data.code === '200') {
         const todayWeather = data.daily[0]; // 获取今天的天气数据
         document.getElementById('weather-date').innerText = `日期: ${todayWeather.fxDate}`;
@@ -245,17 +246,17 @@ function initThemeToggle() {
     const themeToggleBtn = document.querySelector('.theme-toggle');
     const themeIcon = themeToggleBtn.querySelector('i');
     const themeText = themeToggleBtn.querySelector('span');
-    
+
     // 从localStorage获取保存的主题
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
     updateThemeButton(savedTheme);
     setRandomBackground(savedTheme); // 设置对应主题的背景色
-    
+
     themeToggleBtn.addEventListener('click', () => {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
+
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
         updateThemeButton(newTheme);
@@ -266,7 +267,7 @@ function initThemeToggle() {
 function updateThemeButton(theme) {
     const themeIcon = document.querySelector('.theme-toggle i');
     const themeText = document.querySelector('.theme-toggle span');
-    
+
     if (theme === 'dark') {
         themeIcon.className = 'fas fa-moon';
         themeText.textContent = '切换亮色';
@@ -292,119 +293,89 @@ document.addEventListener('DOMContentLoaded', () => {
     initThemeToggle(); // 初始化主题切换功能
 });
 
-function updateHolidayCountdown() {
+async function updateHolidayCountdown() {
     const today = new Date();
     let currentYear = today.getFullYear();
     //所有节假日
-    const holidays = [
-        { name: '元旦', date: new Date(currentYear + (new Date(currentYear, 0, 1) < today ? 1 : 0), 0, 1) },
-        { name: '春节', date: getLunarFestivalDate(currentYear + (getLunarFestivalDate(currentYear, '春节') < today ? 1 : 0), '春节') },
-        { name: '清明节', date: getLunarFestivalDate(currentYear + (getLunarFestivalDate(currentYear, '清明节') < today ? 1 : 0), '清明节') },
-        { name: '劳动节', date: new Date(currentYear + (new Date(currentYear, 4, 1) < today ? 1 : 0), 4, 1) },
-        { name: '端午节', date: getLunarFestivalDate(currentYear + (getLunarFestivalDate(currentYear, '端午节') < today ? 1 : 0), '端午节') },
-        { name: '中秋节', date: getLunarFestivalDate(currentYear + (getLunarFestivalDate(currentYear, '中秋节') < today ? 1 : 0), '中秋节') },
-        { name: '国庆节', date: new Date(currentYear + (new Date(currentYear, 9, 1) < today ? 1 : 0), 9, 1) }
+    // 读取自定义节日数据
+    let customHolidays = [];
+    try {
+        const response = await fetch('./holidays.json');
+        customHolidays = await response.json();
+    } catch (error) {
+        console.error('读取自定义节日数据失败:', error);
+    }
+
+    // 转换自定义节日日期格式
+    const processedCustom = customHolidays.map(holiday => {
+        let date;
+        if (holiday.type === 'lunar') {
+            date = chineseLunar.lunarToSolar(currentYear, holiday.month, holiday.day)
+            if (date < today) date.setFullYear(date.getFullYear() + 1);
+            date = new Date(date);
+        } else {
+            date = new Date(currentYear, holiday.month - 1, holiday.day);
+            if (date < today) date.setFullYear(date.getFullYear() + 1);
+        }
+        return {
+            name: holiday.name,
+            date: date,
+            description: holiday._comment
+        };
+    });
+
+    const holidays = [...processedCustom,
+    { name: '元旦', date: new Date(currentYear + (new Date(currentYear, 0, 1) < today ? 1 : 0), 0, 1) },
+    { name: '春节', date: getLunarFestivalDate(currentYear + (getLunarFestivalDate(currentYear, '春节') < today ? 1 : 0), '春节') },
+    { name: '清明节', date: getLunarFestivalDate(currentYear + (getLunarFestivalDate(currentYear, '清明节') < today ? 1 : 0), '清明节') },
+    { name: '劳动节', date: new Date(currentYear + (new Date(currentYear, 4, 1) < today ? 1 : 0), 4, 1) },
+    { name: '端午节', date: getLunarFestivalDate(currentYear + (getLunarFestivalDate(currentYear, '端午节') < today ? 1 : 0), '端午节') },
+    { name: '中秋节', date: getLunarFestivalDate(currentYear + (getLunarFestivalDate(currentYear, '中秋节') < today ? 1 : 0), '中秋节') },
+    { name: '国庆节', date: new Date(currentYear + (new Date(currentYear, 9, 1) < today ? 1 : 0), 9, 1) }
     ];
 
-    //节假日排序
-    holidays.sort((a, b) => (a.date - today) - (b.date - today));
-    //取最近的两个
-    const nextHolidays = holidays.filter(holiday => holiday.date >= today).slice(0, 2);
-    console.log(nextHolidays,holidays)
-    
-    
+    // 节假日排序
+    holidays.sort((a, b) => a.date - b.date);
 
-    // 计算距离2025年元旦
-    let newYear = new Date(currentYear, 0, 1); // 2025年元旦
-    let daysUntilNewYear = Math.ceil((newYear - today) / (1000 * 60 * 60 * 24));
-    if (daysUntilNewYear < 0) {
-        currentYear += 1; // 如果元旦已经过去，年份加1
-        newYear = new Date(currentYear, 0, 1); // 重新获取元旦的日期
-        daysUntilNewYear = Math.ceil((newYear - today) / (1000 * 60 * 60 * 24));
-    }
-    document.getElementById('new-year-count').innerText = `距离${currentYear}年元旦还有 ${daysUntilNewYear} 天`;
-    if (nextHolidays.some(holiday => holiday.name === '元旦')) {
-        document.getElementById('new-year-card').style.display = 'flex'; // 显示元旦卡片
-    }
-    currentYear = today.getFullYear();
+    // 添加日期有效性检查
+    const validDates = holidays.filter(holiday => holiday.date instanceof Date && !isNaN(holiday.date));
 
-    // 计算距离2025年春节
-    let springFestival = getLunarFestivalDate(currentYear, '春节'); // 获取春节的准确日期
-    if (springFestival < today) {
-        currentYear += 1; // 如果春节已经过去，年份加1
-        springFestival = getLunarFestivalDate(currentYear, '春节'); // 重新获取春节的日期
-    }
-    const daysUntilSpringFestival = Math.ceil((springFestival - today) / (1000 * 60 * 60 * 24));
-    document.getElementById('spring-festival-count').innerText = `距离${currentYear}年春节还有 ${daysUntilSpringFestival} 天`;
-    if (nextHolidays.some(holiday => holiday.name === '春节')) {
-        document.getElementById('spring-festival-card').style.display = 'flex'; // 显示春节卡片
-    }
-    currentYear = today.getFullYear();
+    // 取最近的两个有效节假日
+    const nextHolidays = validDates.filter(holiday => holiday.date >= today).slice(0, 2);
 
-    // 计算距离清明节
-    let qingmingFestival = getLunarFestivalDate(currentYear, '清明节'); // 获取清明节的准确日期
-    if (qingmingFestival < today) {
-        currentYear += 1; // 如果清明节已经过去，年份加1
-        qingmingFestival = getLunarFestivalDate(currentYear, '清明节'); // 重新获取清明节的日期
-    }
-    const daysUntilQingming = Math.ceil((qingmingFestival - today) / (1000 * 60 * 60 * 24));
-    document.getElementById('qingming-festival-count').innerText = `距离${currentYear}年清明节还有 ${daysUntilQingming} 天`;
-    if (nextHolidays.some(holiday => holiday.name === '清明节')) {
-        document.getElementById('qingming-festival-card').style.display = 'flex'; // 显示清明节卡片
-    }
-    currentYear = today.getFullYear();
+    console.log(nextHolidays, holidays);
 
-    // 计算距离劳动节
-    let laborDay = new Date(currentYear, 4, 1); // 劳动节（5月1日）
-    let daysUntilLaborDay = Math.ceil((laborDay - today) / (1000 * 60 * 60 * 24));
-    if(daysUntilLaborDay < 0){
-        currentYear +=1;
-        laborDay = new Date(currentYear, 4, 1); // 劳动节（5月1日）
-        daysUntilLaborDay = Math.ceil((laborDay - today) / (1000 * 60 * 60 * 24));
-    }
-    document.getElementById('labor-day-count').innerText = `距离${currentYear}年劳动节还有 ${daysUntilLaborDay} 天`;
-    if (nextHolidays.some(holiday => holiday.name === '劳动节')) {
-        document.getElementById('labor-day-card').style.display = 'flex'; // 显示劳动节卡片
-    }
-    currentYear = today.getFullYear();
 
-    // 计算距离端午节
-    let duanwuFestival = getLunarFestivalDate(currentYear, '端午节'); // 获取端午节的准确日期
-    if (duanwuFestival < today) {
-        currentYear += 1; // 如果端午节已经过去，年份加1
-        duanwuFestival = getLunarFestivalDate(currentYear, '端午节'); // 重新获取端午节的日期
-    }
-    const daysUntilDuanwu = Math.ceil((duanwuFestival - today) / (1000 * 60 * 60 * 24));
-    document.getElementById('duanwu-festival-count').innerText = `距离${currentYear}年端午节还有 ${daysUntilDuanwu} 天`;
-    if (nextHolidays.some(holiday => holiday.name === '端午节')) {
-        document.getElementById('duanwu-festival-card').style.display = 'flex'; // 显示端午节卡片
-    }
-    currentYear = today.getFullYear();
+    // 更新自定义节日卡片显示
+    nextHolidays.forEach(holiday => {
+        const cardId = `${holiday.name.replace(/[\s＀-￿]/g, '-')}-card`;
+        const cardElement = document.getElementById(cardId) || createHolidayCard(holiday);
+        cardElement.style.display = 'flex';
+    });
 
-    // 计算距离中秋节
-    let midAutumnFestival = getLunarFestivalDate(currentYear, '中秋节'); // 获取中秋节的准确日期
-    if (midAutumnFestival < today) {
-        currentYear += 1; // 如果中秋节已经过去，年份加1
-        midAutumnFestival = getLunarFestivalDate(currentYear, '中秋节'); // 重新获取中秋节的日期
-    }
-    const daysUntilMidAutumn = Math.ceil((midAutumnFestival - today) / (1000 * 60 * 60 * 24));
-    document.getElementById('mid-autumn-festival-count').innerText = `距离${currentYear}年中秋节还有 ${daysUntilMidAutumn} 天`;
-    if (nextHolidays.some(holiday => holiday.name === '中秋节')) {
-        document.getElementById('mid-autumn-festival-card').style.display = 'flex'; // 显示中秋节卡片
-    }
-    currentYear = today.getFullYear();
+    function createHolidayCard(holiday) {
+        let container = document.querySelector('.holiday-cards-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'holiday-cards-container';
+            const section = document.querySelector('.holiday-section');
+            if (section) section.appendChild(container);
+            else return;
+        }
 
-    // 计算距离国庆节
-    let nationalDay = new Date(currentYear, 9, 1); // 国庆节（10月1日）
-    let daysUntilNationalDay = Math.ceil((nationalDay - today) / (1000 * 60 * 60 * 24));
-    if(daysUntilNationalDay < 0){
-        currentYear +=1;
-        nationalDay = new Date(currentYear, 9, 1); // 国庆节（10月1日）
-        daysUntilNationalDay = Math.ceil((nationalDay - today) / (1000 * 60 * 60 * 24));
-    }
-    document.getElementById('national-day-count').innerText = `距离${currentYear}年国庆节还有 ${daysUntilNationalDay} 天`;
-    if (nextHolidays.some(holiday => holiday.name === '国庆节')) {
-        document.getElementById('national-day-card').style.display = 'flex'; // 显示国庆节卡片
+
+        const card = document.createElement('div');
+        card.className = 'holiday-card';
+        card.id = `${holiday.name.replace(/[\s＀-￿]/g, '-')}-card`;
+        card.innerHTML = `
+            <div class="holiday-icon">${holiday.description == undefined ? holiday.name.slice(0,1) : '<img src="images/1.jpg" alt="" srcset="" style="width: 28px;height: 28px;border-radius: 6px;">'}</div>
+            <div>
+                <div class="holiday-info">${holiday.name}</div>
+                <div id="new-year-count" class="holiday-info-mini">距离${holiday.date.getFullYear()}年${holiday.name}${holiday.description == undefined ? '' : holiday.description}还有 ${Math.ceil((holiday.date - today) / (1000 * 60 * 60 * 24))} 天</div>
+            </div>
+        `;
+        container.appendChild(card);
+        return card;
     }
 }
 
@@ -533,11 +504,11 @@ dynamicGif.addEventListener('click', () => {
  */
 function getLocalISODate(date) {
     // 计算时区偏移量（分钟）转换为毫秒
-    const offset = date.getTimezoneOffset() * 60000; 
+    const offset = date.getTimezoneOffset() * 60000;
     // 通过减去时区偏移量来修正日期，得到本地时间
-    const adjustedDate = new Date(date - offset);    
+    const adjustedDate = new Date(date - offset);
     // 将修正后的日期转换为 ISO 格式字符串，并按 'T' 分割，返回包含日期和时间的数组
-    return adjustedDate.toISOString().split('T'); 
+    return adjustedDate.toISOString().split('T');
 }
 // 监听 DOM 内容加载完成事件
 window.addEventListener('DOMContentLoaded', () => {
@@ -559,7 +530,7 @@ scheduleContent.addEventListener('change', (e) => {
         const notes = JSON.parse(localStorage.getItem('notes')) || [];
         notes[index].completed = e.target.checked;
         localStorage.setItem('notes', JSON.stringify(notes));
-        console.log(notes,e.target.checked,e.target.dataset.index);
+        console.log(notes, e.target.checked, e.target.dataset.index);
         if (e.target?.classList?.contains('rili-checkbox')) {
             notes[e.target.dataset.index].completed = e.target.checked;
             localStorage.setItem('notes', JSON.stringify(notes));

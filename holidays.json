@@ -1,0 +1,34 @@
+[
+  {
+    "name": "王荣国",
+    "type": "lunar",
+    "month": 2,
+    "day": 16,
+    "description": "农历二月十六日",
+    "_comment": "生日"
+  },
+  {
+    "name": "黄舒昱",
+    "type": "solar",
+    "month": 4,
+    "day": 19,
+    "description": "公历四月十九日",
+    "_comment": "生日"
+  },
+  {
+    "name": "王月桂",
+    "type": "lunar",
+    "month": 11,
+    "day": 14,
+    "description": "农历十一月十四日",
+    "_comment": "生日"
+  },
+  {
+    "name": "林雅虹",
+    "type": "lunar",
+    "month": 4,
+    "day": 25,
+    "description": "农历四月二十五日",
+    "_comment": "生日"
+  }
+]
