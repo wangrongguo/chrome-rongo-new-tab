@@ -17,6 +17,38 @@ function setRandomBackground(theme = 'light') {
         document.body.style.backgroundColor = randomColor;
     }
 }
+/**
+ * 判断 "show-more-btn" 按钮的状态并根据便签数量更新其显示状态。
+ * 同时保持按钮的展开或关闭状态。
+ * 当便签数量超过 3 条时显示按钮，否则隐藏。
+ */
+function checkShowMoreButtonStatus() {
+    const showMoreBtn = document.getElementById('show-more-btn');
+    const notes = JSON.parse(localStorage.getItem('notes')) || [];
+    const isExpanded = showMoreBtn?.textContent === '收起'; // 判断当前是否为展开状态
+    if (notes.length > 3) {
+        showMoreBtn.style.display = 'block';
+        
+    } else {
+        showMoreBtn.style.display = 'none';
+    }
+    // 保持之前的展开或关闭状态
+    if (isExpanded) {
+        showMoreBtn.textContent = '收起';
+        const items = document.querySelectorAll('.schedule-item');
+        items.forEach(item => {
+            item.style.display = 'block'; // 展开状态显示所有便签
+        });
+    } else {
+        showMoreBtn.textContent = '展开';
+        const items = document.querySelectorAll('.schedule-item');
+        items.forEach((item, index) => {
+            if (index >= 3) {
+                item.style.display = 'none'; // 非展开状态隐藏多余便签
+            }
+        });
+    }
+}
 
 // 更新时钟
 function updateClock() {
@@ -108,6 +140,7 @@ saveNoteBtn.addEventListener('click', () => {
         // 新增刷新页面功能
         // window.location.reload();
         calendar.renderCalendar(); // 重新渲染日历
+        checkShowMoreButtonStatus(); // 检查并更新 "更多" 按钮状态-保持内容的展开或关闭状态
         
     }
 });
@@ -144,7 +177,7 @@ function loadNotes() {
         noteItem.innerHTML = `
             <div class="schedule-time">${note.reminder}</div>
             <div>
-                <div><strong>${new Date(note.reminder) < today ? '' : `<input type="checkbox" ${note.completed ? 'checked' : ''} class="note-checkbox" data-index="${index}">`}${note.title}</strong>: <span class="note-text ${note.completed ? 'completed' : ''}" title="${note.text}">${note.text.substring(0,25)}</span></div>
+                <div><strong>${new Date(note.reminder) < today ? '' : `<input type="checkbox" ${note.completed ? 'checked' : ''} class="rili-checkbox" data-index="${index}">`}${note.title}</strong>: <span class="note-text ${note.completed ? 'completed' : ''}" title="${note.text}">${note.text.substring(0,25)}</span></div>
             </div>
             <button class="delete-note-btn" data-index="${index}"><img data-index="${index}" class="delete-note-btn" src="images/close.png" alt="关闭" /></button>
         `;
@@ -152,17 +185,7 @@ function loadNotes() {
     });
 
     // 控制"更多"按钮的显示
-    if (notes.length > 3) {
-        const items = document.querySelectorAll('.schedule-item');
-        items.forEach((item, index) => {
-            if (index >= 3) {
-                item.style.display = 'none'; // 隐藏多余的便签
-            }
-        });
-        showMoreBtn.style.display = 'block'; // 显示"更多"按钮
-    } else {
-        showMoreBtn.style.display = 'none'; // 隐藏"更多"按钮
-    }
+    checkShowMoreButtonStatus(); // 检查并更新 "更多" 按钮状态-保持内容的展开或关闭状态
 }
 
 // 删除便签
@@ -175,6 +198,7 @@ scheduleContent.addEventListener('click', (e) => {
             localStorage.setItem('notes', JSON.stringify(notes));
             loadNotes();
             calendar.renderCalendar(); // 重新渲染日历
+            checkShowMoreButtonStatus(); // 检查并更新 "更多" 按钮状态-保持内容的展开或关闭状态
         }
     }
 });
@@ -530,14 +554,22 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // 添加复选框事件监听
 scheduleContent.addEventListener('change', (e) => {
-    if (e.target.classList.contains('note-checkbox')) {
+    if (e.target.classList.contains('rili-checkbox')) {
         const index = e.target.dataset.index;
         const notes = JSON.parse(localStorage.getItem('notes')) || [];
         notes[index].completed = e.target.checked;
         localStorage.setItem('notes', JSON.stringify(notes));
-        console.log(notes,e.target.checked,e.target.dataset.index)
-        // e.target.nextElementSibling.classList.toggle('completed');
+        console.log(notes,e.target.checked,e.target.dataset.index);
+        if (e.target?.classList?.contains('rili-checkbox')) {
+            notes[e.target.dataset.index].completed = e.target.checked;
+            localStorage.setItem('notes', JSON.stringify(notes));
+            e.target.closest('.schedule-item').querySelector('.note-text').classList.toggle('completed', e.target.checked);
+        }
+        e.target.nextElementSibling?.classList?.toggle('completed');
         // 新增刷新页面功能
         // window.location.reload();
     }
 });
+
+
+

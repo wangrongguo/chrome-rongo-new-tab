@@ -233,6 +233,15 @@ body {
         accent-color: var(--primary-100);
         outline: 2px solid var(--primary-200);
     }
+    .rili-checkbox {
+        margin-right: 8px;
+        cursor: pointer;
+    }
+
+    .rili-checkbox:hover {
+        accent-color: var(--primary-100);
+        outline: 2px solid var(--primary-200);
+    }
 }
 
 .schedule-item .note-text {
