@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,18 +10,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script type="module" src="js/model-viewer.min.js"></script>
 </head>
+
 <body>
     <div class="container">
+        <button id="settings-btn">
+            <!-- 假设使用 Font Awesome 的设置图标 -->
+            <i class="fas fa-cog"></i>
+        </button>
         <!-- 主题切换按钮 -->
         <button class="theme-toggle">
             <i class="fas fa-sun"></i>
             <span>切换主题</span>
         </button>
-        
+
         <!-- 左侧导航菜单 -->
         <div class="nav-menu">
             <div class="profile">
-                <div class="avatar"><img src="images/logo.jpg" alt="" srcset="" style="width: 32px;height: 32px;border-radius: 50%;"></div>
+                <div class="avatar"><img src="images/logo.jpg" alt="" srcset=""
+                        style="width: 32px;height: 32px;border-radius: 50%;"></div>
                 <div class="profile-info">
                     <div>祺弄先生</div>
                 </div>
@@ -54,7 +61,7 @@
                     <span class="nav-icon">退</span>
                     <span>Log Out</span>
                 </a> -->
-                
+
             </div>
         </div>
 
@@ -86,7 +93,7 @@
                 <div class="schedule-content" id="schedule-content">
                     <!-- 便签项将动态添加到这里 -->
                 </div>
-                
+
                 <div id="note-modal" class="modal">
                     <div class="modal-content">
                         <span class="close">
@@ -95,8 +102,8 @@
                         <input type="text" id="note-title-input" placeholder="便签标题..." />
                         <textarea id="note-input" placeholder="添加便签内容..." rows="8"></textarea>
                         <div class="reminder-picker">
-                          <input type="date" id="reminder-date">
-                          <input type="time" id="reminder-time">
+                            <input type="date" id="reminder-date">
+                            <input type="time" id="reminder-time">
                         </div>
                         <div>
                             <button id="save-note-btn">确认</button>
@@ -106,7 +113,7 @@
                 </div>
             </div>
 
-            
+
         </div>
 
         <!-- 右侧日历区域 -->
@@ -126,7 +133,7 @@
                     </div>
                     <button class="today-btn">今天</button>
                 </div>
-                
+
                 <div class="calendar">
                     <!-- 星期头部 -->
                     <div class="weekday-header">一</div>
@@ -136,7 +143,7 @@
                     <div class="weekday-header">五</div>
                     <div class="weekday-header weekend">六</div>
                     <div class="weekday-header weekend">日</div>
-                    
+
                     <!-- 日期单元格示例 -->
                     <div class="calendar-day">
                         <span class="solar-date">17</span>
@@ -155,18 +162,37 @@
                     <p id="weather-humidity">湿度: </p>
                 </div>
             </div>
-            
-            
+
+
         </div>
     </div>
     <!-- 添加模型显示区域 -->
     <div id="model-container">
         <div class="tooltip"></div>
-        <img id="dynamic-gif" src="images/IMG_4388.gif" alt="模型" style="width: 100px; height: 100px; border-radius: 50px; cursor: pointer;">
+        <img id="dynamic-gif" src="images/IMG_4388.gif" alt="模型"
+            style="width: 100px; height: 100px; border-radius: 50px; cursor: pointer;">
+    </div>
+    <!-- 编辑节假日 -->
+    <div id="modal-overlay"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999;">
+    </div>
+    <div id="holiday-editor"
+        style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">
+        <span class="close"><img src="images/close.png" alt="关闭"
+                style="width: 20px; height: 20px;" /></span>
+        <h2>编辑节假日</h2>
+        <textarea id="holiday-json" rows="20" cols="100"></textarea>
+        <button id="save-button">保存</button>
+    </div>
+    <div id="modal-all"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999;">
+        <div class="loading-spinner"></div>
+        <span style="position: fixed; top: 50%; left: 50%;margin-top: 50px;color: aliceblue;">加载中...</span>
     </div>
 
     <script src="lib/chinese-lunar.min.js"></script>
     <script type="module" src="js/calendar.js"></script>
     <script type="module" src="js/main.js"></script>
 </body>
+
 </html>

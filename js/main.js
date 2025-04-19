@@ -368,7 +368,7 @@ async function updateHolidayCountdown() {
         card.className = 'holiday-card';
         card.id = `${holiday.name.replace(/[\s＀-￿]/g, '-')}-card`;
         card.innerHTML = `
-            <div class="holiday-icon">${holiday.description == undefined ? holiday.name.slice(0,1) : '<img src="images/1.jpg" alt="" srcset="" style="width: 28px;height: 28px;border-radius: 6px;">'}</div>
+            <div class="holiday-icon">${holiday.description == undefined ? holiday.name.slice(0, 1) : '<img src="images/1.jpg" alt="" srcset="" style="width: 28px;height: 28px;border-radius: 6px;">'}</div>
             <div>
                 <div class="holiday-info">${holiday.name}</div>
                 <div id="new-year-count" class="holiday-info-mini">距离${holiday.date.getFullYear()}年${holiday.name}${holiday.description == undefined ? '' : holiday.description}还有 ${Math.ceil((holiday.date - today) / (1000 * 60 * 60 * 24))} 天</div>
@@ -541,6 +541,103 @@ scheduleContent.addEventListener('change', (e) => {
         // window.location.reload();
     }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const holidayJsonTextarea = document.getElementById('holiday-json');
+    const saveButton = document.getElementById('save-button');
+
+    // 读取holidays.json文件
+    fetch('../holidays.json')
+        .then(response => response.json())
+        .then(data => {
+            holidayJsonTextarea.value = JSON.stringify(data, null, 2);
+        });
+
+    // 保存修改
+    saveButton.addEventListener('click', () => {
+        try {
+            const newData = JSON.parse(holidayJsonTextarea.value);
+            modalAll.style.display = 'block';
+            // 使用FileSystem Access API保存数据到holidays.json
+            try {
+                (async () => {
+                    const handle = await window.showSaveFilePicker({
+                        suggestedName: 'holidays.json',
+                        types: [{
+                            description: 'JSON 文件',
+                            accept: { 'application/json': ['.json'] }
+                        }]
+                    });
+                    const writable = await handle.createWritable();
+                    await writable.write(JSON.stringify(newData, null, 2));
+                    await writable.close();
+                    console.log('保存的数据:', newData);
+                    alert('保存成功');
+                    modalAll.style.display = 'none';
+                })();
+            } catch (error) {
+                console.error('保存文件时出错:', error);
+                alert('保存失败，请重试');
+            }
+        } catch (error) {
+            alert('JSON格式错误，请检查输入');
+        }
+    });
+});
+
+
+
+
+// 获取设置按钮和编辑框
+const settingsBtn = document.getElementById('settings-btn');
+// 关闭节假日编辑弹窗
+const holidayEditor = document.getElementById('holiday-editor');
+const modalOverlay = document.getElementById('modal-overlay');
+const modalAll = document.getElementById('modal-all');
+
+
+const holidayEditorClose = document.querySelector('#holiday-editor .close');
+if (holidayEditorClose) {
+    holidayEditorClose.addEventListener('click', () => {
+        if (holidayEditor) {
+            holidayEditor.style.display = 'none';
+            modalOverlay.style.display = 'none';
+        }
+    });
+}
+
+// 点击设置按钮弹出编辑框
+settingsBtn.addEventListener('click', () => {
+    holidayEditor.style.display = holidayEditor.style.display === 'none' ? 'block' : 'none';
+    modalOverlay.style.display = modalOverlay.style.display === 'none' ? 'block' : 'none';
+});
+
+
+
+
+// 显示节假日编辑弹窗和遮罩
+function showHolidayEditor() {
+    document.getElementById('modal-overlay').style.display = 'block';
+    document.getElementById('holiday-editor').style.display = 'block';
+}
+
+// 隐藏节假日编辑弹窗和遮罩
+function hideHolidayEditor() {
+    document.getElementById('modal-overlay').style.display = 'none';
+    document.getElementById('holiday-editor').style.display = 'none';
+}
+
+// 假设保存按钮点击事件
+const saveButton = document.getElementById('save-button');
+if (saveButton) {
+    saveButton.addEventListener('click', hideHolidayEditor);
+}
+
+// 假设关闭按钮点击事件
+const closeHolidayEditor = document.querySelector('#holiday-editor .close');
+if (closeHolidayEditor) {
+    closeHolidayEditor.addEventListener('click', hideHolidayEditor);
+}
 
 
 
