@@ -10,9 +10,9 @@
   {
     "name": "五一",
     "type": "solar",
-    "month": 5,
-    "day": 1,
-    "description": "新历五月一日",
+    "month": 4,
+    "day": 30,
+    "description": "新历四月三十日",
     "_comment": "放假"
   },
   {

@@ -118,6 +118,12 @@ export class Calendar {
         const startDay = firstDay.getDay() || 7; // 将周日的0改为7
         const totalDays = lastDay.getDate();
 
+        // 读取holiday-work.json文件
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '../holiday-work.json', false);
+        xhr.send();
+        const holidayWorkData = JSON.parse(xhr.responseText);
+
         let calendarHTML = this.getWeekdayHeaders();
         let dayCount = 1;
         let rows = Math.ceil((totalDays + startDay - 1) / 7);
@@ -147,11 +153,33 @@ export class Calendar {
                             reminderDate.getDate() === date.getDate();
                     });
 
+                    // 检查是否在holiday-work.json中有记录
+                    const holidayWorkItem = holidayWorkData.find(item => item.month === month + 1 && item.day === dayNumber && item.year === year);
+                    let workClass = '';
+                    let workText = '';
+                    let workAllClass = '';
+                    let workAllText = '';
+
+                    if (holidayWorkItem) {
+                        if (holidayWorkItem.type === '班') {
+                            workClass = ' work-day';
+                            workAllClass = ' work-all-day';
+                            workAllText = ' work-font-color'
+                            workText = '班';
+                        } else if (holidayWorkItem.type === '休') {
+                            workClass = ' rest-day';
+                            workAllClass = ' rest-all-day';
+                            workAllText = ' rest-font-color'
+                            workText = '休';
+                        }
+                    }
+
                     calendarHTML += `
-                        <div class="calendar-day ${holidayClass}${isToday ? ' today' : ''}${isWeekend ? ' weekend' : ''}">
+                        <div class="calendar-day ${holidayClass}${isToday ? ' today' : ''}${isWeekend ? ' weekend' : ''}${workAllClass}">
                             ${hasReminder.length > 0 ? '<span class="reminder-marker">'+hasReminder.length+'</span>' : ''}
-                            <span class="solar-date">${dayNumber}</span>
-                            <span class="lunar-date">${festival || solarTerm || chineseLunar.format(lunar, 'D') || '无农历'}</span>
+                            <span class="solar-date${workAllText}">${dayNumber}</span>
+                            <span class="lunar-date${workAllText}">${festival || solarTerm || chineseLunar.format(lunar, 'D') || '无农历'}</span>
+                            ${workText ? `<span class="work-type ${workClass}">${workText}</span>` : ''}
                         </div>
                     `;
                 } else {

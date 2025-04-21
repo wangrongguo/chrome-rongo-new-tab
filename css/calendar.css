@@ -95,7 +95,7 @@
     position: absolute;
     top: 2px;
     right: 2px;
-    background: #f27635;
+    background: #F18F01;
     color: white;
     font-size: 0.6em;
     width: 16px;
@@ -263,4 +263,45 @@
 .note-checkbox {
     margin-right: 8px;
     cursor: pointer;
+}
+
+/* 节假日放假与补休情况 */
+/*上班*/
+.work-day {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    color: var(--text-200);
+    font-size: 0.6em;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/*休假*/
+.rest-day {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    color: #ee3f4d;
+    font-size: 0.6em;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.work-all-day {
+    
+}
+.rest-all-day {
+    background: #EB33330D;
+    color: #ee3f4d  !important;
+}
+.work-font-color {
+    color:  var(--text-200) !important;
+}
+.rest-font-color {
+    color: #ee3f4d !important;
 }
