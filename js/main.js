@@ -142,6 +142,8 @@ saveNoteBtn.addEventListener('click', () => {
         // window.location.reload();
         calendar.renderCalendar(); // 重新渲染日历
         checkShowMoreButtonStatus(); // 检查并更新 "更多" 按钮状态-保持内容的展开或关闭状态
+        // 显示成功提示
+        showNotification('操作成功！', 'success');
 
     }
 });
@@ -200,6 +202,8 @@ scheduleContent.addEventListener('click', (e) => {
             loadNotes();
             calendar.renderCalendar(); // 重新渲染日历
             checkShowMoreButtonStatus(); // 检查并更新 "更多" 按钮状态-保持内容的展开或关闭状态
+            // 显示成功提示
+            showNotification('操作成功！', 'success');
         }
     }
 });
@@ -544,13 +548,22 @@ scheduleContent.addEventListener('change', (e) => {
 
 document.addEventListener('DOMContentLoaded', () => {
     const holidayJsonTextarea = document.getElementById('holiday-json');
+    const holidayWorkJsonTextarea = document.getElementById('holiday-work-json');
     const saveButton = document.getElementById('save-button');
+    const saveHolidayWorkButton = document.getElementById('save-holiday-work-button');
+
 
     // 读取holidays.json文件
     fetch('../holidays.json')
         .then(response => response.json())
         .then(data => {
             holidayJsonTextarea.value = JSON.stringify(data, null, 2);
+        });
+    // 读取holidays.json文件
+    fetch('../holiday-work.json')
+        .then(response => response.json())
+        .then(data => {
+            holidayWorkJsonTextarea.value = JSON.stringify(data, null, 2);
         });
 
     // 保存修改
@@ -572,15 +585,53 @@ document.addEventListener('DOMContentLoaded', () => {
                     await writable.write(JSON.stringify(newData, null, 2));
                     await writable.close();
                     console.log('保存的数据:', newData);
-                    alert('保存成功');
+                    // 显示成功提示
+                    showNotification('操作成功！', 'success');
+
                     modalAll.style.display = 'none';
                 })();
             } catch (error) {
                 console.error('保存文件时出错:', error);
-                alert('保存失败，请重试');
+                // 显示失败提示
+                showNotification('操作失败，请重试！', 'error');
             }
         } catch (error) {
-            alert('JSON格式错误，请检查输入');
+            // 显示失败提示
+            showNotification('JSON格式错误，请检查输入！', 'error');
+        }
+    });
+
+    // 保存修改
+    saveHolidayWorkButton.addEventListener('click', () => {
+        try {
+            const newData = JSON.parse(holidayWorkJsonTextarea.value);
+            modalAll.style.display = 'block';
+            // 使用FileSystem Access API保存数据到holidays.json
+            try {
+                (async () => {
+                    const handle = await window.showSaveFilePicker({
+                        suggestedName: 'holiday-work.json',
+                        types: [{
+                            description: 'JSON 文件',
+                            accept: { 'application/json': ['.json'] }
+                        }]
+                    });
+                    const writable = await handle.createWritable();
+                    await writable.write(JSON.stringify(newData, null, 2));
+                    await writable.close();
+                    console.log('保存的数据:', newData);
+                    // 显示成功提示
+                    showNotification('操作成功！', 'success');
+                    modalAll.style.display = 'none';
+                })();
+            } catch (error) {
+                console.error('保存文件时出错:', error);
+                showNotification('操作失败，请重试！', 'error');
+
+            }
+        } catch (error) {
+            showNotification('JSON格式错误，请检查输入！', 'error');
+
         }
     });
 });
@@ -590,13 +641,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 获取设置按钮和编辑框
 const settingsBtn = document.getElementById('settings-btn');
+const settingsHolidayWorkBtn = document.getElementById('settings-holiday-work-btn');
 // 关闭节假日编辑弹窗
 const holidayEditor = document.getElementById('holiday-editor');
+const holidayWorkEditor = document.getElementById('holiday-work-editor');
+
 const modalOverlay = document.getElementById('modal-overlay');
 const modalAll = document.getElementById('modal-all');
 
-
+// 点击关闭按钮关闭编辑框
 const holidayEditorClose = document.querySelector('#holiday-editor .close');
+if (holidayEditorClose) {
+    holidayEditorClose.addEventListener('click', () => {
+        if (holidayEditor) {
+            holidayEditor.style.display = 'none';
+            modalOverlay.style.display = 'none';
+        }
+    });
+}
+// 点击关闭按钮关闭编辑框
+const holidayWorkEditorClose = document.querySelector('#holiday-work-editor .close');
 if (holidayEditorClose) {
     holidayEditorClose.addEventListener('click', () => {
         if (holidayEditor) {
@@ -609,6 +673,11 @@ if (holidayEditorClose) {
 // 点击设置按钮弹出编辑框
 settingsBtn.addEventListener('click', () => {
     holidayEditor.style.display = holidayEditor.style.display === 'none' ? 'block' : 'none';
+    modalOverlay.style.display = modalOverlay.style.display === 'none' ? 'block' : 'none';
+});
+// 点击设置按钮弹出编辑框
+settingsHolidayWorkBtn.addEventListener('click', () => {
+    holidayWorkEditor.style.display = holidayEditor.style.display === 'none' ? 'block' : 'none';
     modalOverlay.style.display = modalOverlay.style.display === 'none' ? 'block' : 'none';
 });
 
@@ -638,6 +707,64 @@ const closeHolidayEditor = document.querySelector('#holiday-editor .close');
 if (closeHolidayEditor) {
     closeHolidayEditor.addEventListener('click', hideHolidayEditor);
 }
+
+
+// 显示节假日编辑弹窗和遮罩
+function showHolidayWorkEditor() {
+    document.getElementById('modal-overlay').style.display = 'block';
+    document.getElementById('holiday-work-editor').style.display = 'block';
+}
+
+// 隐藏节假日编辑弹窗和遮罩
+function hideHolidayWorkEditor() {
+    document.getElementById('modal-overlay').style.display = 'none';
+    document.getElementById('holiday-work-editor').style.display = 'none';
+}
+
+// 假设保存按钮点击事件
+const saveHolidayWorkButton = document.getElementById('save-holiday-work-button');
+if (saveHolidayWorkButton) {
+    saveHolidayWorkButton.addEventListener('click', hideHolidayWorkEditor);
+}
+
+// 假设关闭按钮点击事件
+const closeHolidayWorkEditor = document.querySelector('#holiday-work-editor .close');
+if (closeHolidayWorkEditor) {
+    closeHolidayWorkEditor.addEventListener('click', hideHolidayWorkEditor);
+}
+
+/**
+ * 显示提示弹窗
+ * @param {string} message - 提示信息
+ * @param {string} type - 提示类型，'success' 或 'error'
+ */
+function showNotification(message, type) {
+    const notification = document.getElementById('notification');
+    const messageElement = document.getElementById('notification-message');
+
+    // 设置提示信息和类型
+    messageElement.textContent = message;
+    notification.className = `notification ${type}`;
+
+    // 添加显示类名，触发滑动动画
+    notification.classList.add('show');
+    notification.style.display = 'block';
+
+    // 5 秒后移除显示类名，添加隐藏类名，触发渐变动画
+    setTimeout(() => {
+        notification.classList.remove('show');
+        notification.classList.add('hide');
+
+        // 动画结束后隐藏弹窗并移除隐藏类名
+        setTimeout(() => {
+            notification.style.display = 'none';
+            notification.classList.remove('hide');
+        }, 500);
+    }, 5000);
+}
+
+
+
 
 
 

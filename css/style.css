@@ -625,3 +625,607 @@ model-viewer {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+
+#settings-holiday-work-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: var(--bg-200);
+    border-radius: 50%;
+    color: var(--text-100);
+    z-index: 100;
+    width: 25px;
+    height: 25px;
+    border: none;
+    cursor: pointer;
+}
+#settings-holiday-work-btn:hover {
+    background: var(--bg-300);
+}
+
+#holiday-work-editor {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--bg-100);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+#holiday-work-editor h2 {
+    margin-top: 0;
+    color: var(--text-100);
+}
+
+#holiday-work-json {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#save-holiday-work-button {
+    padding: 5px 10px;
+    background-color: var(--primary-100);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+/* 定义弹窗显示动画：从上往下滑动 */
+@keyframes slideDown {
+    from {
+        top: -50px;
+        opacity: 0;
+    }
+    to {
+        top: 20px;
+        opacity: 1;
+    }
+}
+
+/* 定义弹窗隐藏动画：渐变消失 */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* 修改通知弹窗样式 */
+.notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+/* 显示时应用滑动动画 */
+.notification.show {
+    animation-name: slideDown;
+}
+
+/* 隐藏时应用渐变动画 */
+.notification.hide {
+    animation-name: fadeOut;
+}
+
+/* 成功提示样式 */
+.notification.success {
+    background-color: #4CAF50;
+}
+
+/* 失败提示样式 */
+.notification.error {
+    background-color: #f44336;
+}
+.holiday-info-mini {
+    font-size: 0.8em;
+}
+
+/* 便签区域 */
+.schedule-section {
+    background: var(--bg-200);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.schedule-title {
+    font-size: 0.85em;
+    color: var(--text-100);
+}
+
+.schedule-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.schedule-tab {
+    padding: 5px 12px;
+    background: var(--primary-100);
+    color: white;
+    border-radius: 12px;
+    font-size: 0.75em;
+    cursor: pointer;
+    border: none;
+}
+
+.schedule-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.schedule-item {
+    position: relative;
+    flex: 1 1 calc(33.33% - 8px);
+    padding: 10px 20px;
+    background: #F5ECD7;
+    border-radius: 6px;
+    font-size: 1em;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    .note-checkbox {
+        margin-right: 8px;
+        cursor: pointer;
+    }
+
+    .note-checkbox:hover {
+        accent-color: var(--primary-100);
+        outline: 2px solid var(--primary-200);
+    }
+    .rili-checkbox {
+        margin-right: 8px;
+        cursor: pointer;
+    }
+
+    .rili-checkbox:hover {
+        accent-color: var(--primary-100);
+        outline: 2px solid var(--primary-200);
+    }
+}
+
+.schedule-item .note-text {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.schedule-item .note-text:hover {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+}
+
+.schedule-time {
+    color: var(--primary-200);
+    font-size: 0.7em;
+    font-weight: 500;
+    margin-bottom: 4px;
+    margin-bottom: 4px;
+}
+
+/* 右侧面板样式 */
+.right-panel {
+    width: 100%;
+    max-width: 568px;
+    padding: 20px 0 20px 30px;
+    border-left: 1px solid var(--bg-200);
+    box-sizing: border-box;
+}
+
+/* 中等屏幕响应式布局（≤1200px）
+   1. 调整容器为两列布局（导航栏+主内容）
+   2. 隐藏右侧面板以优化空间利用 */
+@media (max-width: 1200px) {
+    .container {
+        grid-template-columns: 60px 586px;
+    }
+    .clock {
+        font-size: 2.7em;
+    }
+    .right-panel {
+        display: none;
+    }
+}
+
+@media (min-width: 1201px) and (max-width: 1600px) {
+    .container {
+        grid-template-columns: 60px 586px 40%; /* 中等宽屏布局（1201-1600px）保持三栏结构，右侧面板使用40%自适应宽度 */
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 586px; /* 小屏布局（≤768px），导航栏和主内容合并为一列 */;
+        padding: 10px;
+    }
+    
+    .nav-menu {
+        display: none;
+    }
+}
+
+.right-panel h1 {
+    font-size: 1.6em;
+    margin: 0 0 20px 0;
+    color: var(--text-100);
+}
+
+/* 便签输入框和按钮样式 */
+#note-input {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid var(--text-200);
+    margin-bottom: 10px;
+    width: 100%;
+    resize: none; /* 禁止调整大小 */
+}
+
+#add-note-btn {
+    padding: 5px 10px;
+    border: none;
+    background: var(--primary-100);
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+
+#add-note-btn:hover {
+    background: var(--primary-200);
+}
+
+/* 模态框样式 */
+.modal {
+    display: none; /* 隐藏模态框 */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 600px;
+    border-radius: 8px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    margin-top: -10px;
+    margin-right: -8px;
+}
+
+.close:hover,
+.close:focus {
+    color: #888;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 便签删除按钮样式 */
+.delete-note-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    font-size: 0.8em;
+
+    img {
+        width: 18px;
+        height: 18px;
+        opacity: 0.7;
+    }
+
+    &:hover img {
+        opacity: 1;
+    }
+}
+
+#note-title-input {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid var(--text-200);
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+#note-input {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid var(--text-200);
+    margin-bottom: 10px;
+    width: 100%;
+    resize: none; /* 禁止调整大小 */
+}
+
+#save-note-btn,
+#cancel-note-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+#save-note-btn {
+    background: var(--primary-100);
+    color: white;
+}
+
+#cancel-note-btn {
+    background: var(--accent-200);
+    color: white;
+}
+
+#save-note-btn:hover {
+    background: var(--primary-200);
+}
+
+#cancel-note-btn:hover {
+    background: var(--accent-100);
+}
+.schedule-header {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+}
+
+#add-note-btn,
+#show-more-btn {
+    margin: 5px 0;
+}
+
+#show-more-btn {
+    padding: 5px 10px;
+    border: none;
+    background: var(--primary-100);
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+
+#show-more-btn:hover {
+    background: var(--primary-200);
+}
+.holiday{
+    color: brown;
+}
+
+/* 主题切换按钮样式 */
+.theme-toggle {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: var(--bg-200);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-100);
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+.theme-toggle:hover {
+    background: var(--bg-300);
+}
+
+.theme-toggle i {
+    font-size: 16px;
+}
+
+#model-container {
+    position: fixed;
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    right: 10%;
+    bottom: 10%;
+}
+
+model-viewer {
+    width: 100%;
+    height: 300px;
+    --poster-color: transparent;
+    --progress-bar-color: #4CAF50;
+    --progress-mask: transparent;
+}
+
+.tooltip {
+    position: absolute;
+    top: -80px;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    color: #333;
+    display: none;
+    width: 250px;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    right: 20px;
+    border-width: 10px 10px 0;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.95) transparent transparent;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.reminder-picker{
+    margin: 0 0 10px 0;
+}
+
+.schedule-item.expired {
+  background-color: #f0f0f0;
+  opacity: 0.7;
+}
+
+#settings-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: var(--bg-200);
+    border-radius: 50%;
+    color: var(--text-100);
+    z-index: 100;
+    width: 25px;
+    height: 25px;
+    border: none;
+    cursor: pointer;
+}
+#settings-btn:hover {
+    background: var(--bg-300);
+}
+
+#holiday-editor {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--bg-100);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+#holiday-editor h2 {
+    margin-top: 0;
+    color: var(--text-100);
+}
+
+#holiday-json {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#save-button {
+    padding: 5px 10px;
+    background-color: var(--primary-100);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.loading-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid var(--primary-100);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    position: fixed; 
+    top: 50%; 
+    left: 50%;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+#settings-holiday-work-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: var(--bg-200);
+    border-radius: 50%;
+    color: var(--text-100);
+    z-index: 100;
+    width: 25px;
+    height: 25px;
+    border: none;
+    cursor: pointer;
+}
+#settings-holiday-work-btn:hover {
+    background: var(--bg-300);
+}
+
+#holiday-work-editor {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--bg-100);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+#holiday-work-editor h2 {
+    margin-top: 0;
+    color: var(--text-100);
+}
+
+#holiday-work-json {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#save-holiday-work-button {
+    padding: 5px 10px;
+    background-color: var(--primary-100);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
