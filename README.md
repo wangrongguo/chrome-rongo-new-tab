@@ -249,7 +249,8 @@ demo008/
 | 极端日期格式兼容性问题 | 使用YYYY-MM-DD标准格式 |
 | 3D模型加载失败 | 检查网络连接和模型文件路径 |
 
-# 提示弹窗功能
+
+## 提示弹窗功能
 ## 功能用途
 在页面上显示成功或失败的提示信息，弹窗会在 5 秒后自动消失。
 
@@ -267,32 +268,35 @@ showNotification('操作成功！', 'success');
 
 // 显示失败提示
 showNotification('操作失败，请重试！', 'error');
+```
+## 确认取消弹窗功能
+### 功能用途
+在页面上显示一个确认取消弹窗，用户可以选择确认或取消操作，并执行相应的回调函数。
 
+### 使用方法
+在您的 JavaScript 代码中调用 `showConfirmDialog` 函数：
+```javascript
+showConfirmDialog('您确定要执行此操作吗？', 
+    () => { 
+        // 确认操作的回调函数
+        console.log('用户点击了确认'); 
+    }, 
+    () => { 
+        // 取消操作的回调函数
+        console.log('用户点击了取消'); 
+    }
+);
+```
 
-# 示例规则文件内容
-# --- 代码规范 ---
-code_style: snake_case  # 强制变量使用蛇形命名‌:ml-citation{ref="1,3" data="citationList"}
-comment_coverage: 80%   # 注释覆盖率不低于80%‌:ml-citation{ref="1" data="citationList"}
+# 项目说明
 
-# --- 文件管理 ---
-ignore: **/tests/*       # 忽略测试目录‌:ml-citation{ref="3" data="citationList"}
-protect: core/*.py      # 禁止修改核心代码文件‌:ml-citation{ref="3" data="citationList"}
+## `index.json` 文件说明
+`index.json` 包含了人物昵称、导航网站信息以及一周每天的俏皮文案。
 
-# --- AI行为约束 ---
-role: "全栈工程师+技术文档编写员"  # 定义AI生成角色‌:ml-citation{ref="1,8" data="citationList"}
-response_lang: zh-CN    # 强制以中文回复‌:ml-citation{ref="8" data="citationList"}
+### 数据结构
+- `person_nickname`：人物的昵称。
+- `navigation_sites`：导航网站列表，每个网站包含 `name`（网站名称）和 `url`（网站地址）。
+- `weekly_cute_copies`：一周每天的俏皮文案，键为英文的星期名称，值为对应星期的文案数组。
 
-error_handling:
-  - "所有 API 调用必须包含 try/catch 块"
-  - "表单输入字段必须包含类型校验"‌:ml-citation{ref="8" data="citationList"}
-
-comment_policy: 
-  min_coverage: 90%  # 关键函数需100%覆盖‌:ml-citation{ref="5" data="citationList"}
-  language: zh-CN     # 注释强制使用简体中文‌:ml-citation{ref="5,8" data="citationList"}
-
-reasoning_mode: CoT  # 强制 AI 展示完整推理步骤‌:ml-citation{ref="6" data="citationList"}
-example:
-  - "请先分析需求，再列出实现步骤，最后生成代码"‌:ml-citation{ref="6,8" data="citationList"}
-
-
-
+### 使用方法
+你可以在项目代码中读取该文件，根据需要获取人物昵称、导航网站信息或每天的俏皮文案。

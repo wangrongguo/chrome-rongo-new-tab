@@ -21,6 +21,10 @@
             <!-- 假设使用 Font Awesome 的设置图标 -->
             <i class="fas fa-list"></i>
         </button>
+        <button id="settings-index-btn" title="编辑昵称导航文案设置按钮" style="top: 100px;">
+            <!-- 假设使用 Font Awesome 的设置图标 -->
+            <i class="fas fa-bars"></i>
+        </button>
 
         <!-- 主题切换按钮 -->
         <button class="theme-toggle">
@@ -34,38 +38,15 @@
                 <div class="avatar"><img src="images/logo.jpg" alt="" srcset=""
                         style="width: 32px;height: 32px;border-radius: 50%;"></div>
                 <div class="profile-info">
-                    <div>祺弄先生</div>
+                    <div id="person_nickname">祺弄先生</div>
                 </div>
             </div>
-            <div class="nav-content">
-                <a href="https://www.baidu.com" class="nav-item" target="_blank">
+            <div class="nav-content" id="navigation_sites">
+                <!-- <a href="https://www.baidu.com" class="nav-item" target="_blank">
                     <span class="nav-icon">百</span>
                     <span>百度</span>
-                </a>
-                <a href="https://weibo.com" class="nav-item" target="_blank">
-                    <span class="nav-icon">微</span>
-                    <span>微博</span>
-                </a>
-                <a href="https://www.qq.com" class="nav-item" target="_blank">
-                    <span class="nav-icon">腾</span>
-                    <span>腾讯</span>
-                </a>
-                <a href="https://gw.buaa.edu.cn/" class="nav-item" target="_blank">
-                    <span class="nav-icon">网</span>
-                    <span>北航网络</span>
-                </a>
-                <a href="https://it.buaa.edu.cn/html/websites/index.html" class="nav-item" target="_blank">
-                    <span class="nav-icon">快</span>
-                    <span>北航快捷</span>
-                </a>
-                <a href="https://www.buaa.edu.cn/" class="nav-item" target="_blank">
-                    <span class="nav-icon">官</span>
-                    <span>北航官网</span>
-                </a>
-                <!-- <a href="#" class="nav-item logout">
-                    <span class="nav-icon">退</span>
-                    <span>Log Out</span>
                 </a> -->
+                
 
             </div>
         </div>
@@ -104,6 +85,15 @@
                         <span class="close">
                             <img src="images/close.png" alt="关闭" style="width: 20px; height: 20px;" />
                         </span>
+                        <!-- 在标题输入框上方添加快捷标题按钮 -->
+                        <div class="quick-title-buttons">
+                            <button class="quick-title-button">学习日</button>
+                            <button class="quick-title-button">考试</button>
+                            <button class="quick-title-button">开会</button>
+                            <button class="quick-title-button">今日事宜</button>
+                            <button class="quick-title-button">一周事宜</button>
+                            <button class="quick-title-button">其他</button>
+                        </div>
                         <input type="text" id="note-title-input" placeholder="便签标题..." />
                         <textarea id="note-input" placeholder="添加便签内容..." rows="8"></textarea>
                         <div class="reminder-picker">
@@ -196,6 +186,14 @@
         <textarea id="holiday-work-json" rows="20" cols="100"></textarea>
         <button id="save-holiday-work-button">保存</button>
     </div>
+    <!-- 节假日日历调休显示情况 -->
+    <div id="index-editor"
+        style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">
+        <span class="close"><img src="images/close.png" alt="关闭" style="width: 20px; height: 20px;" /></span>
+        <h2>编辑昵称文案导航网站（文件保存到当前插件根目录）</h2>
+        <textarea id="index-json" rows="20" cols="100"></textarea>
+        <button id="save-index-button">保存</button>
+    </div>
     <!-- 加载中 -->
     <div id="modal-all"
         style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999;">
@@ -209,6 +207,7 @@
 
     <script src="lib/chinese-lunar.min.js"></script>
     <script type="module" src="js/calendar.js"></script>
+    <script src="js/confirm-dialog.js"></script>
     <script type="module" src="js/main.js"></script>
 </body>
 

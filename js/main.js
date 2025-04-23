@@ -105,8 +105,17 @@ cancelNoteBtn.addEventListener('click', () => {
 
 // 保存便签
 saveNoteBtn.addEventListener('click', () => {
-    const noteText = noteInput.value.trim();
     const noteTitle = noteTitleInput.value.trim(); // 获取标题
+    if (!noteTitle) {
+        // 显示错误提示
+        showNotification('请输入标题！', 'error');
+        return; // 阻止保存操作
+    }
+    let noteText = noteInput.value.trim();// 获取便签内容
+    if (!noteText) {
+        // 显示标题
+        noteText = noteTitle; // 获取标题
+    }
     if (noteText && noteTitle) {
         const now = new Date();
         const notes = JSON.parse(localStorage.getItem('notes')) || [];
@@ -196,17 +205,54 @@ scheduleContent.addEventListener('click', (e) => {
     if (e.target.classList.contains('delete-note-btn')) {
         const index = e.target.getAttribute('data-index');
         const notes = JSON.parse(localStorage.getItem('notes')) || [];
-        if (confirm('确定要删除这个便签吗？')) {
-            notes.splice(index, 1);
-            localStorage.setItem('notes', JSON.stringify(notes));
-            loadNotes();
-            calendar.renderCalendar(); // 重新渲染日历
-            checkShowMoreButtonStatus(); // 检查并更新 "更多" 按钮状态-保持内容的展开或关闭状态
-            // 显示成功提示
-            showNotification('操作成功！', 'success');
-        }
+
+        showConfirmDialog('确定要删除这个便签吗？',
+            () => {
+                // 确认操作的回调函数
+                console.log('用户点击了确认');
+                notes.splice(index, 1);
+                localStorage.setItem('notes', JSON.stringify(notes));
+                loadNotes();
+                calendar.renderCalendar(); // 重新渲染日历
+                checkShowMoreButtonStatus(); // 检查并更新 "更多" 按钮状态-保持内容的展开或关闭状态
+                // 显示成功提示
+                showNotification('操作成功！', 'success');
+            },
+            () => {
+                // 取消操作的回调函数
+                console.log('用户点击了取消');
+            }
+        );
+        // if (confirm('确定要删除这个便签吗？')) {
+        //     notes.splice(index, 1);
+        //     localStorage.setItem('notes', JSON.stringify(notes));
+        //     loadNotes();
+        //     calendar.renderCalendar(); // 重新渲染日历
+        //     checkShowMoreButtonStatus(); // 检查并更新 "更多" 按钮状态-保持内容的展开或关闭状态
+        //     // 显示成功提示
+        //     showNotification('操作成功！', 'success');
+        // }
     }
 });
+
+
+// 初始化时监听 quick-title-buttons 容器的点击事件
+document.addEventListener('DOMContentLoaded', () => {
+    const quickTitleButtonsContainer = document.querySelector('.quick-title-buttons');
+    if (quickTitleButtonsContainer) {
+        quickTitleButtonsContainer.addEventListener('click', (event) => {
+            // 检查点击的元素是否是按钮
+            if (event.target.tagName === 'BUTTON') {
+                const title = event.target.textContent;
+                const noteTitleInput = document.getElementById('note-title-input');
+                if (noteTitleInput) {
+                    noteTitleInput.value = title;
+                }
+            }
+        });
+    }
+});
+
 
 // 显示更多便签
 let isExpanded = false; // 用于跟踪当前状态
@@ -295,7 +341,50 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchWeather(); // 获取天气数据
     setInterval(updateHolidayCountdown, 86400000); // 每天更新一次
     initThemeToggle(); // 初始化主题切换功能
+    initIndexJson(); // 初始化index.json
 });
+
+async function initIndexJson() {
+    try {
+        // 从 JSON 文件中读取每日提示语
+        const response = await fetch('./index.json');
+        console.log(response);
+        let dailyMessages_ = await response.json();
+        console.log(dailyMessages_);
+        dailyMessages = dailyMessages_[0].weekly_cute_copies;
+        console.log('dailyMessages', dailyMessages);
+        //用户昵称
+        // 用户昵称
+        const personNicknameElement = document.getElementById('person_nickname');
+        if (personNicknameElement) {
+            personNicknameElement.textContent = dailyMessages_[0].person_nickname;
+        }
+        // 网站导航
+        const navigationSites = dailyMessages_[0].navigation_sites;
+        const navigationDiv = document.getElementById('navigation_sites');
+
+        if (navigationDiv) {
+            // 清空现有导航链接
+            navigationDiv.innerHTML = '';
+
+            // 遍历导航网站数据并创建链接元素
+            navigationSites.forEach(site => {
+                const link = document.createElement('a');
+                link.href = site.url;
+                link.className = 'nav-item';
+                link.target = '_blank';
+                link.innerHTML = `
+                    <span class="nav-icon">${site.name.charAt(0)}</span>
+                    <span>${site.name}</span>
+                `;
+                navigationDiv.appendChild(link);
+            });
+        }
+
+    } catch (error) {
+
+    }
+}
 
 async function updateHolidayCountdown() {
     const today = new Date();
@@ -411,57 +500,10 @@ const tooltip = document.querySelector('.tooltip');
 let isClicked = false;
 
 // 每日提示语
-const dailyMessages = {
-    1: [ // 周一
-        "周一：灵魂还在周末，身体已在工位。",
-        "周一的我：重启失败，进入低电量模式。",
-        "周一早上，我和床的爱情故事又上演了生离死别。",
-        "今天的心情和闹钟一样，响得让人崩溃。",
-        "周一：我以为我起得早，结果是闹钟起得早。"
-    ],
-    2: [ // 周二
-        "周二：周一的续集，但依然没有彩蛋。",
-        "周二的我：已经上班一天了，怎么才周二？",
-        "周二：距离周末还有四天，但我的耐心只有两天。",
-        "周二：离周末还很远，但离崩溃很近。",
-        "周二的我，像极了被生活榨干的柠檬。",
-        "周二：努力假装自己是个积极向上的打工人。"
-    ],
-    3: [ // 周三
-        "周三：一周的分水岭，前不着村后不着店。",
-        "周三的我：一半是火焰，一半是海水。",
-        "周三：恭喜你，已经熬过了一半，但另一半还在等你。",
-        "周三：一周的中间，人生的低谷。",
-        "周三：前不着村，后不着店，只能硬着头皮往前走。",
-        "周三的我，已经忘了周末长什么样了。"
-    ],
-    4: [ // 周四
-        "周四：假装周五，骗自己快解脱了。",
-        "周四的我：已经开始计划周末的躺平姿势。",
-        "周四：距离周末只有一步之遥，但这一步好远。",
-        "周四：假装自己还能撑到周五。",
-        "周四：距离周末还有24小时，但感觉像24年。",
-        "周四：身体在上班，灵魂在摸鱼。"
-    ],
-    5: [ // 周五
-        "周五：打工人的曙光，快乐的起点！",
-        "周五的我：表面认真工作，内心已经在蹦迪。",
-        "周五：今天的努力，是为了明天的不努力。",
-        "周五：终于看到了一丝曙光，虽然微弱但足够让我撑下去。",
-        "周五：表面淡定，内心已经在蹦迪。",
-        "周五：今天的我，是周末的预备选手。"
-    ],
-    6: [ // 周六
-        "周六：睡到自然醒，躺到自然饿。",
-        "周六的我：终于可以忘记周一到周五的烦恼。",
-        "周六：今天不努力，明天也不努力，快乐加倍！"
-    ],
-    0: [ // 周日
-        "周日：快乐倒计时，焦虑加载中。",
-        "周日的我：一边享受自由，一边为周一默哀。",
-        "周日：明天是周一，但今天的我还是无敌的！"
-    ]
-};
+let dailyMessages = {};
+
+
+
 
 // 获取当天的随机一条消息
 function getDailyMessage() {
@@ -549,8 +591,11 @@ scheduleContent.addEventListener('change', (e) => {
 document.addEventListener('DOMContentLoaded', () => {
     const holidayJsonTextarea = document.getElementById('holiday-json');
     const holidayWorkJsonTextarea = document.getElementById('holiday-work-json');
+    const indexJsonTextarea = document.getElementById('index-json');
     const saveButton = document.getElementById('save-button');
     const saveHolidayWorkButton = document.getElementById('save-holiday-work-button');
+    const saveIndexkButton = document.getElementById('save-index-button');
+
 
 
     // 读取holidays.json文件
@@ -564,6 +609,12 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             holidayWorkJsonTextarea.value = JSON.stringify(data, null, 2);
+        });
+    // 读取index.json文件
+    fetch('../index.json')
+        .then(response => response.json())
+        .then(data => {
+            indexJsonTextarea.value = JSON.stringify(data, null, 2);
         });
 
     // 保存修改
@@ -591,6 +642,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         showNotification('操作成功！', 'success');
 
                         modalAll.style.display = 'none';
+                        // 新增刷新页面功能
+                        window.location.reload();
                     } catch (error) {
                         if (error.name === 'AbortError') {
                             // 用户取消了保存操作，可选择记录日志或忽略
@@ -647,6 +700,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         // 显示成功提示
                         showNotification('操作成功！', 'success');
                         modalAll.style.display = 'none';
+                        // 新增刷新页面功能
+                        window.location.reload();
                     } catch (error) {
                         if (error.name === 'AbortError') {
                             // 用户取消了保存操作，可选择记录日志或忽略
@@ -658,7 +713,61 @@ document.addEventListener('DOMContentLoaded', () => {
                         modalAll.style.display = 'none';
                         // 显示失败提示
                         showNotification('操作失败，请重试！', 'error');
-                        
+
+                    }
+                })();
+            } catch (error) {
+                console.error('保存文件时出错:', error);
+                modalAll.style.display = 'none';
+                // 显示失败提示
+                showNotification('操作失败，请重试！', 'error');
+
+            }
+        } catch (error) {
+            modalAll.style.display = 'none';
+            // 显示失败提示
+            showNotification('JSON格式错误，请检查输入！', 'error');
+
+        }
+    });
+
+    //saveIndexkButton保持用户导航信息修改
+    saveIndexkButton.addEventListener('click', () => {
+        try {
+            const newData = JSON.parse(indexJsonTextarea.value);
+            modalAll.style.display = 'block';
+            // 使用FileSystem Access API保存数据到holidays.json
+            try {
+                (async () => {
+                    try {
+                        const handle = await window.showSaveFilePicker({
+                            suggestedName: 'index.json',
+                            types: [{
+                                description: 'JSON 文件',
+                                accept: { 'application/json': ['.json'] }
+                            }]
+                        });
+                        const writable = await handle.createWritable();
+                        await writable.write(JSON.stringify(newData, null, 2));
+                        await writable.close();
+                        console.log('保存的数据:', newData);
+                        // 显示成功提示
+                        showNotification('操作成功！', 'success');
+                        modalAll.style.display = 'none';
+                        // 新增刷新页面功能
+                        window.location.reload();
+                    } catch (error) {
+                        if (error.name === 'AbortError') {
+                            // 用户取消了保存操作，可选择记录日志或忽略
+                            console.log('用户取消了文件保存操作');
+                        } else {
+                            // 处理其他错误
+                            console.error('保存文件时发生错误:', error);
+                        }
+                        modalAll.style.display = 'none';
+                        // 显示失败提示
+                        showNotification('操作失败，请重试！', 'error');
+
                     }
                 })();
             } catch (error) {
@@ -683,9 +792,13 @@ document.addEventListener('DOMContentLoaded', () => {
 // 获取设置按钮和编辑框
 const settingsBtn = document.getElementById('settings-btn');
 const settingsHolidayWorkBtn = document.getElementById('settings-holiday-work-btn');
+const settingsIndexBtn = document.getElementById('settings-index-btn');
+
 // 关闭节假日编辑弹窗
 const holidayEditor = document.getElementById('holiday-editor');
 const holidayWorkEditor = document.getElementById('holiday-work-editor');
+const indexEditor = document.getElementById('index-editor');
+
 
 const modalOverlay = document.getElementById('modal-overlay');
 const modalAll = document.getElementById('modal-all');
@@ -710,6 +823,16 @@ if (holidayEditorClose) {
         }
     });
 }
+// 点击关闭按钮关闭编辑框
+const indexEditorClose = document.querySelector('#index-editor .close');
+if (indexEditorClose) {
+    indexEditorClose.addEventListener('click', () => {
+        if (holidayEditor) {
+            holidayEditor.style.display = 'none';
+            modalOverlay.style.display = 'none';
+        }
+    });
+}
 
 // 点击设置按钮弹出编辑框
 settingsBtn.addEventListener('click', () => {
@@ -719,6 +842,11 @@ settingsBtn.addEventListener('click', () => {
 // 点击设置按钮弹出编辑框
 settingsHolidayWorkBtn.addEventListener('click', () => {
     holidayWorkEditor.style.display = holidayEditor.style.display === 'none' ? 'block' : 'none';
+    modalOverlay.style.display = modalOverlay.style.display === 'none' ? 'block' : 'none';
+});
+// 点击设置按钮弹出编辑框
+settingsIndexBtn.addEventListener('click', () => {
+    indexEditor.style.display = indexEditor.style.display === 'none' ? 'block' : 'none';
     modalOverlay.style.display = modalOverlay.style.display === 'none' ? 'block' : 'none';
 });
 
@@ -772,6 +900,31 @@ if (saveHolidayWorkButton) {
 const closeHolidayWorkEditor = document.querySelector('#holiday-work-editor .close');
 if (closeHolidayWorkEditor) {
     closeHolidayWorkEditor.addEventListener('click', hideHolidayWorkEditor);
+}
+
+
+// 显示节假日编辑弹窗和遮罩
+function showIndexEditor() {
+    document.getElementById('modal-overlay').style.display = 'block';
+    document.getElementById('index-editor').style.display = 'block';
+}
+
+// 隐藏节假日编辑弹窗和遮罩
+function hideIndexEditor() {
+    document.getElementById('modal-overlay').style.display = 'none';
+    document.getElementById('index-editor').style.display = 'none';
+}
+
+// 假设保存按钮点击事件
+const saveIndexButton = document.getElementById('save-index-button');
+if (saveIndexButton) {
+    saveIndexButton.addEventListener('click', hideIndexEditor);
+}
+
+// 假设关闭按钮点击事件
+const closeIndexEditor = document.querySelector('#index-editor .close');
+if (closeIndexEditor) {
+    closeIndexEditor.addEventListener('click', hideIndexEditor);
 }
 
 /**

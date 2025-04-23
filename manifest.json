@@ -6,7 +6,13 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
-  "permissions": ["storage"],
+  "permissions": ["storage","activeTab","scripting"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/confirm-dialog.js"]
+    }
+  ],
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
