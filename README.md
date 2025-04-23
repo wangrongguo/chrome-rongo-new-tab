@@ -267,3 +267,32 @@ showNotification('操作成功！', 'success');
 
 // 显示失败提示
 showNotification('操作失败，请重试！', 'error');
+
+
+# 示例规则文件内容
+# --- 代码规范 ---
+code_style: snake_case  # 强制变量使用蛇形命名‌:ml-citation{ref="1,3" data="citationList"}
+comment_coverage: 80%   # 注释覆盖率不低于80%‌:ml-citation{ref="1" data="citationList"}
+
+# --- 文件管理 ---
+ignore: **/tests/*       # 忽略测试目录‌:ml-citation{ref="3" data="citationList"}
+protect: core/*.py      # 禁止修改核心代码文件‌:ml-citation{ref="3" data="citationList"}
+
+# --- AI行为约束 ---
+role: "全栈工程师+技术文档编写员"  # 定义AI生成角色‌:ml-citation{ref="1,8" data="citationList"}
+response_lang: zh-CN    # 强制以中文回复‌:ml-citation{ref="8" data="citationList"}
+
+error_handling:
+  - "所有 API 调用必须包含 try/catch 块"
+  - "表单输入字段必须包含类型校验"‌:ml-citation{ref="8" data="citationList"}
+
+comment_policy: 
+  min_coverage: 90%  # 关键函数需100%覆盖‌:ml-citation{ref="5" data="citationList"}
+  language: zh-CN     # 注释强制使用简体中文‌:ml-citation{ref="5,8" data="citationList"}
+
+reasoning_mode: CoT  # 强制 AI 展示完整推理步骤‌:ml-citation{ref="6" data="citationList"}
+example:
+  - "请先分析需求，再列出实现步骤，最后生成代码"‌:ml-citation{ref="6,8" data="citationList"}
+
+
+

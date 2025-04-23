@@ -725,12 +725,12 @@ model-viewer {
 
 /* 成功提示样式 */
 .notification.success {
-    background-color: #4CAF50;
+    background-color: #3cb690;
 }
 
 /* 失败提示样式 */
 .notification.error {
-    background-color: #f44336;
+    background-color: #ee283c;
 }
 .holiday-info-mini {
     font-size: 0.8em;

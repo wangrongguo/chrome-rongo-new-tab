@@ -573,29 +573,52 @@ document.addEventListener('DOMContentLoaded', () => {
             modalAll.style.display = 'block';
             // 使用FileSystem Access API保存数据到holidays.json
             try {
+                // ... existing code ...
                 (async () => {
-                    const handle = await window.showSaveFilePicker({
-                        suggestedName: 'holidays.json',
-                        types: [{
-                            description: 'JSON 文件',
-                            accept: { 'application/json': ['.json'] }
-                        }]
-                    });
-                    const writable = await handle.createWritable();
-                    await writable.write(JSON.stringify(newData, null, 2));
-                    await writable.close();
-                    console.log('保存的数据:', newData);
-                    // 显示成功提示
-                    showNotification('操作成功！', 'success');
+                    try {
+                        const handle = await window.showSaveFilePicker({
+                            suggestedName: 'holidays.json',
+                            types: [{
+                                description: 'JSON 文件',
+                                accept: { 'application/json': ['.json'] }
+                            }]
+                        });
+                        const writable = await handle.createWritable();
+                        await writable.write(JSON.stringify(newData, null, 2));
+                        await writable.close();
+                        console.log('保存的数据:', newData);
+                        // 显示成功提示
+                        showNotification('操作成功！', 'success');
 
-                    modalAll.style.display = 'none';
+                        modalAll.style.display = 'none';
+                    } catch (error) {
+                        if (error.name === 'AbortError') {
+                            // 用户取消了保存操作，可选择记录日志或忽略
+                            console.log('用户取消了文件保存操作');
+                        } else {
+                            // 处理其他错误
+                            console.error('保存文件时发生错误:', error);
+                        }
+                        modalAll.style.display = 'none';
+                        // 显示失败提示
+                        showNotification('操作失败，请重试！', 'error');
+                    }
                 })();
+                // ... existing code ...
             } catch (error) {
-                console.error('保存文件时出错:', error);
+                if (error.name === 'AbortError') {
+                    // 用户取消了保存操作
+                    console.log('用户取消了保存操作');
+                    return;
+                } else {
+                    console.error('保存文件时出错:', error);
+                }
+                modalAll.style.display = 'none';
                 // 显示失败提示
                 showNotification('操作失败，请重试！', 'error');
             }
         } catch (error) {
+            modalAll.style.display = 'none';
             // 显示失败提示
             showNotification('JSON格式错误，请检查输入！', 'error');
         }
@@ -609,27 +632,45 @@ document.addEventListener('DOMContentLoaded', () => {
             // 使用FileSystem Access API保存数据到holidays.json
             try {
                 (async () => {
-                    const handle = await window.showSaveFilePicker({
-                        suggestedName: 'holiday-work.json',
-                        types: [{
-                            description: 'JSON 文件',
-                            accept: { 'application/json': ['.json'] }
-                        }]
-                    });
-                    const writable = await handle.createWritable();
-                    await writable.write(JSON.stringify(newData, null, 2));
-                    await writable.close();
-                    console.log('保存的数据:', newData);
-                    // 显示成功提示
-                    showNotification('操作成功！', 'success');
-                    modalAll.style.display = 'none';
+                    try {
+                        const handle = await window.showSaveFilePicker({
+                            suggestedName: 'holiday-work.json',
+                            types: [{
+                                description: 'JSON 文件',
+                                accept: { 'application/json': ['.json'] }
+                            }]
+                        });
+                        const writable = await handle.createWritable();
+                        await writable.write(JSON.stringify(newData, null, 2));
+                        await writable.close();
+                        console.log('保存的数据:', newData);
+                        // 显示成功提示
+                        showNotification('操作成功！', 'success');
+                        modalAll.style.display = 'none';
+                    } catch (error) {
+                        if (error.name === 'AbortError') {
+                            // 用户取消了保存操作，可选择记录日志或忽略
+                            console.log('用户取消了文件保存操作');
+                        } else {
+                            // 处理其他错误
+                            console.error('保存文件时发生错误:', error);
+                        }
+                        modalAll.style.display = 'none';
+                        // 显示失败提示
+                        showNotification('操作失败，请重试！', 'error');
+                        
+                    }
                 })();
             } catch (error) {
                 console.error('保存文件时出错:', error);
+                modalAll.style.display = 'none';
+                // 显示失败提示
                 showNotification('操作失败，请重试！', 'error');
 
             }
         } catch (error) {
+            modalAll.style.display = 'none';
+            // 显示失败提示
             showNotification('JSON格式错误，请检查输入！', 'error');
 
         }
@@ -762,9 +803,3 @@ function showNotification(message, type) {
         }, 500);
     }, 5000);
 }
-
-
-
-
-
-
