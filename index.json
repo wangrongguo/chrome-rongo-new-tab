@@ -7,14 +7,6 @@
         "url": "https://www.baidu.com"
       },
       {
-        "name": "微博",
-        "url": "https://weibo.com"
-      },
-      {
-        "name": "腾讯",
-        "url": "https://www.qq.com"
-      },
-      {
         "name": "北航网络",
         "url": "https://gw.buaa.edu.cn/"
       },
@@ -28,7 +20,11 @@
       },
       {
         "name": "Deepseek",
-        "url": "https://www.deepseek.com/"
+        "url": "https://chat.deepseek.com/"
+      },
+      {
+        "name": "秘塔",
+        "url": "https://metaso.cn/"
       }
     ],
     "weekly_cute_copies": {
