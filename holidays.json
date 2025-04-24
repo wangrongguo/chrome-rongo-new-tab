@@ -30,5 +30,21 @@
     "day": 25,
     "description": "农历四月二十五日",
     "_comment": "生日"
+  },
+  {
+    "name": "黄舒昱",
+    "type": "solar",
+    "month": 4,
+    "day": 19,
+    "description": "新历四月十九日",
+    "_comment": "放假"
+  },
+  {
+    "name": "王钧兰",
+    "type": "lunar",
+    "month": 9,
+    "day": 5,
+    "description": "农历九月初五",
+    "_comment": "生日"
   }
 ]
