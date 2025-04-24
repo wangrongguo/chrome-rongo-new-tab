@@ -1452,6 +1452,16 @@ model-viewer {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 15px;
+    gap: 4px;
+    justify-content: center;
+    /* 添加水平居中 */
+    width: 100%;
+    /* 确保占满容器宽度 */
+}
+
+.weather-main i {
+    font-size: 2em;
+    color: var(--primary-100);
 }
 
 .temperature {
@@ -1459,7 +1469,8 @@ model-viewer {
     font-weight: bold;
     color: var(--text-100);
     text-align: center;
-    width: 100%;
+    display: inline-flex;
+    align-items: center;
 }
 
 .weather-desc {
@@ -1523,5 +1534,5 @@ model-viewer {
     position: fixed;
     top: 50%;
     left: 50%;
-    color: #ffffff;  
+    color: #ffffff;
 }

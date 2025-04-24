@@ -297,10 +297,12 @@ const WEATHER_ICON_MAP = {
  */
 function updateWeatherInfo(weatherData, suffix = '') {
     // 更新天气信息
-    document.getElementById(`weather-date${suffix}`).innerText = (suffix == '1' ? `(明天)` : `(今天)`) + `${weatherData.fxDate}`;
+    document.getElementById(`weather-date${suffix}`).innerText = (suffix == '1' ? `明天/` : `今天/`) + `${weatherData.fxDate}`;
     document.getElementById(`weather-description${suffix}`).innerText = `${weatherData.textDay}`;
     document.getElementById(`weather-temperature${suffix}`).innerText = `${weatherData.tempMax}°C / ${weatherData.tempMin}°C`;
     document.getElementById(`weather-humidity${suffix}`).innerText = `湿度: ${weatherData.humidity}%`;
+    document.getElementById(`weather-wind${suffix}`).innerText = `${weatherData.windDirDay}/${weatherData.windScaleDay}级`;
+
 
     // 更新天气图标
     const weatherIcon = document.getElementById(`weather-icon${suffix}`);
