@@ -275,19 +275,59 @@ showMoreBtn.addEventListener('click', () => {
     isExpanded = !isExpanded; // 切换状态
 });
 
-// 获取天气数据
-async function fetchWeather() {
-    const response = await fetch('https://devapi.qweather.com/v7/weather/7d?location=101010100&key=a09a9fa8494440839cdc4c824b6e002d');
-    const data = await response.json();
+// 天气图标映射配置
+const WEATHER_ICON_MAP = {
+    '晴': 'fa-sun',
+    '多云': 'fa-cloud',
+    '少云': 'fa-smog',
+    '阴': 'fa-smog',
+    '小雨': 'fa-cloud-rain',
+    '晴间多云': 'fa-cloud-sun',
+    '阵雨': 'fa-poo-storm',
+    '雷阵雨': 'fa-bolt',
+    '雷阵雨伴有冰雹': 'fa-snowflake',
+    '雨夹雪': 'fa-snowflake',
+    '小雪': 'fa-snowflake'
+};
 
-    if (data.code === '200') {
-        const todayWeather = data.daily[0]; // 获取今天的天气数据
-        document.getElementById('weather-date').innerText = `日期: ${todayWeather.fxDate}`;
-        document.getElementById('weather-description').innerText = `天气: ${todayWeather.textDay}`;
-        document.getElementById('weather-temperature').innerText = `温度: ${todayWeather.tempMax}°C / ${todayWeather.tempMin}°C`;
-        document.getElementById('weather-humidity').innerText = `湿度: ${todayWeather.humidity}%`;
-    } else {
-        console.error('获取天气数据失败:', data);
+/**
+ * 更新天气信息
+ * @param {Object} weatherData - 天气数据
+ * @param {string} suffix - 元素ID后缀（用于区分今明两天）
+ */
+function updateWeatherInfo(weatherData, suffix = '') {
+    // 更新天气信息
+    document.getElementById(`weather-date${suffix}`).innerText = (suffix == '1' ? `(明天)` : `(今天)`) + `${weatherData.fxDate}`;
+    document.getElementById(`weather-description${suffix}`).innerText = `${weatherData.textDay}`;
+    document.getElementById(`weather-temperature${suffix}`).innerText = `${weatherData.tempMax}°C / ${weatherData.tempMin}°C`;
+    document.getElementById(`weather-humidity${suffix}`).innerText = `湿度: ${weatherData.humidity}%`;
+
+    // 更新天气图标
+    const weatherIcon = document.getElementById(`weather-icon${suffix}`);
+    weatherIcon.className = 'fas weather-icon'; // 重置图标类
+    weatherIcon.classList.add(WEATHER_ICON_MAP[weatherData.textDay] || 'fa-umbrella');
+}
+
+/**
+ * 获取天气数据
+ */
+async function fetchWeather() {
+    try {
+        const response = await fetch('https://devapi.qweather.com/v7/weather/7d?location=101010100&key=a09a9fa8494440839cdc4c824b6e002d');
+        const data = await response.json();
+
+        if (data.code === '200') {
+            // 更新今天的天气信息
+            updateWeatherInfo(data.daily[0]);
+            // 更新明天的天气信息
+            updateWeatherInfo(data.daily[1], '1');
+        } else {
+            console.error('获取天气数据失败:', data);
+            showNotification('获取天气数据失败', 'error');
+        }
+    } catch (error) {
+        console.error('获取天气数据出错:', error);
+        showNotification('获取天气数据出错', 'error');
     }
 }
 
