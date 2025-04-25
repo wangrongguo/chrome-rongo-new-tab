@@ -483,6 +483,7 @@ body {
 }
 
 /* 主题切换按钮样式 */
+.fullscreen-toggle,
 .theme-toggle {
     position: fixed;
     top: 10px;
@@ -499,11 +500,19 @@ body {
     transition: all 0.3s ease;
     z-index: 100;
 }
-
+.theme-toggle{
+    right: 60px !important;
+}
+.fullscreen-toggle{
+    padding: 10px !important;
+    border-radius: 50% !important;
+}
+.fullscreen-toggle:hover,
 .theme-toggle:hover {
     background: var(--bg-300);
 }
 
+.fullscreen-toggle i,
 .theme-toggle i {
     font-size: 16px;
 }

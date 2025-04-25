@@ -998,3 +998,16 @@ function showNotification(message, type) {
         }, 500);
     }, 5000);
 }
+
+// 全屏功能实现
+document.querySelector('.fullscreen-toggle').addEventListener('click', function() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+            console.error('全屏错误:', err);
+        });
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+});
