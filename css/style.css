@@ -1507,6 +1507,13 @@ model-viewer {
         width: 100%;
     }
 }
+/* 响应式设计 */
+@media (max-width: 1600px) {
+    /* 第二个使用 .weather-card class 的元素隐藏 */
+    .weather-card:nth-of-type(2) {
+        display: none !important;
+    }
+}
 
 /* 深色模式适配 */
 [data-theme="dark"] .weather-card {
