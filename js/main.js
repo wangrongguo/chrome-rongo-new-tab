@@ -306,7 +306,8 @@ function updateWeatherInfo(weatherData, suffix = '') {
 
     // 更新天气图标
     const weatherIcon = document.getElementById(`weather-icon${suffix}`);
-    weatherIcon.className = 'fas weather-icon'; // 重置图标类
+    // weatherIcon.className = 'fas weather-icon'; // 重置图标类
+    weatherIcon.setAttribute('class', 'fas weather-icon');
     weatherIcon.classList.add(WEATHER_ICON_MAP[weatherData.textDay] || 'fa-umbrella');
 }
 
@@ -326,10 +327,12 @@ async function fetchWeather() {
         } else {
             console.error('获取天气数据失败:', data);
             showNotification('获取天气数据失败', 'error');
+            document.querySelector('.weather-container').style.display = 'none';// 隐藏天气容器
         }
     } catch (error) {
         console.error('获取天气数据出错:', error);
         showNotification('获取天气数据出错', 'error');
+        document.querySelector('.weather-container').style.display = 'none';// 隐藏天气容器
     }
 }
 
@@ -543,9 +546,6 @@ let isClicked = false;
 
 // 每日提示语
 let dailyMessages = {};
-
-
-
 
 // 获取当天的随机一条消息
 function getDailyMessage() {
@@ -832,14 +832,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // 获取设置按钮和编辑框
-const settingsBtn = document.getElementById('settings-btn');
-const settingsHolidayWorkBtn = document.getElementById('settings-holiday-work-btn');
-const settingsIndexBtn = document.getElementById('settings-index-btn');
+const settingsBtn = document.getElementById('settings-btn');//设置自定义节假日
+const settingsHolidayWorkBtn = document.getElementById('settings-holiday-work-btn');//设置工作日调休
+const settingsIndexBtn = document.getElementById('settings-index-btn');//设置主页导航昵称
+const newspaperBtn = document.getElementById('newspaper-btn');// 新增资讯
+
 
 // 关闭节假日编辑弹窗
 const holidayEditor = document.getElementById('holiday-editor');
 const holidayWorkEditor = document.getElementById('holiday-work-editor');
 const indexEditor = document.getElementById('index-editor');
+const newspaperDetails = document.getElementById('newspaper-details');
+
 
 
 const modalOverlay = document.getElementById('modal-overlay');
@@ -876,6 +880,17 @@ if (indexEditorClose) {
     });
 }
 
+// 点击关闭按钮关闭编辑框
+const newspaperDetailsClose = document.querySelector('#newspaper-details .close');
+if (newspaperDetailsClose) {
+    newspaperDetailsClose.addEventListener('click', () => {
+        if (newspaperDetails) {
+            newspaperDetails.style.display = 'none';
+            modalOverlay.style.display = 'none';
+        }
+    });
+}
+
 // 点击设置按钮弹出编辑框
 settingsBtn.addEventListener('click', () => {
     holidayEditor.style.display = holidayEditor.style.display === 'none' ? 'block' : 'none';
@@ -890,6 +905,13 @@ settingsHolidayWorkBtn.addEventListener('click', () => {
 settingsIndexBtn.addEventListener('click', () => {
     indexEditor.style.display = indexEditor.style.display === 'none' ? 'block' : 'none';
     modalOverlay.style.display = modalOverlay.style.display === 'none' ? 'block' : 'none';
+});
+// 点击设置按钮弹出编辑框
+newspaperBtn.addEventListener('click', () => {
+    newspaperDetails.style.display = newspaperDetails.style.display === 'none' ? 'block' : 'none';
+    modalOverlay.style.display = modalOverlay.style.display === 'none' ? 'block' : 'none';
+    //初始化
+    getNewspaperDetail(0);
 });
 
 
@@ -1010,4 +1032,125 @@ document.querySelector('.fullscreen-toggle').addEventListener('click', function(
             document.exitFullscreen();
         }
     }
+});
+/**
+ * 获取新闻详情数据并显示在页面上
+ * 从多个新闻源API随机获取热点新闻列表
+ */
+function getNewspaperDetail(icount_url) {
+    modalAll.style.display = 'block';
+    // 新闻源API地址数组
+    const vvhan_url = [
+        'https://api.vvhan.com/api/hotlist/zhihuHot',
+        'https://api.vvhan.com/api/hotlist/wbHot',
+        'https://api.vvhan.com/api/hotlist/toutiao',
+        'https://api.vvhan.com/api/hotlist/pengPai',
+        'https://api.vvhan.com/api/hotlist/huPu',
+        'https://api.vvhan.com/api/hotlist/zhihuDay',
+        'https://api.vvhan.com/api/hotlist/36Ke',
+        'https://api.vvhan.com/api/hotlist/huXiu',
+        'https://api.vvhan.com/api/hotlist/itNews',
+        'https://api.vvhan.com/api/hotlist/woShiPm'
+    ];
+    
+    // 新闻源对应的标题
+    const vvhan_title = [
+        '知乎', '微博', '头条', '澎湃', '虎扑', 
+        '知乎日报', '36Ke', '虎嗅', 'IT之家', '人人都是产品经理'
+    ];
+
+    try {
+        // 随机选择一个新闻源
+        // const icount_url = Math.floor(Math.random() * vvhan_url.length);
+        
+        fetch(vvhan_url[icount_url])
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('网络响应不正常');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data || !data.data) {
+                    throw new Error('无效的API响应');
+                }
+                
+                // 生成新闻列表HTML
+                const weiboHtml = generateNewsHtml(data.data);
+                
+                // 更新DOM
+                updateNewsDisplay(weiboHtml, icount_url);
+            })
+            .catch(error => {
+                console.log('请求失败:', error);
+                showNotification('获取新闻失败，请稍后重试', 'error');
+            })
+            .finally(() => {
+                // element.classList.remove('layui-anim-rotate');
+                // element.classList.remove('layui-anim-loop');
+                modalAll.style.display = 'none';
+            });
+    } catch (error) {
+        console.log('获取新闻数据时出错:', error);
+        showNotification('获取新闻数据时出错', 'error');
+    }
+}
+
+/**
+ * 生成新闻列表HTML
+ * @param {Array} newsData - 新闻数据数组
+ * @returns {string} 生成的HTML字符串
+ */
+function generateNewsHtml(newsData) {
+    return newsData.reduce((html, item) => {
+        const truncatedTitle = item.title.length > 70 
+            ? item.title.slice(0, 70) + '...' 
+            : item.title;
+            
+        return html + `<div class="news-item">
+            <span class="news-index">${item.index}.</span>
+            <a class="news-link" title="${item.title}" 
+               href="${item.url}" target="_blank">${truncatedTitle}</a>
+        </div>`;
+    }, '');
+}
+
+/**
+ * 更新新闻显示区域
+ * @param {string} html - 要显示的HTML内容
+ * @param {string} title - 新闻源标题
+ */
+function updateNewsDisplay(html, title) {
+    console.log(html, title);
+    if (html) {
+const parsedTitle = parseInt(title, 10); // 将 title 转换为数字
+const newTitle = isNaN(parsedTitle) ? title : parsedTitle + 1; // 如果转换成功则加 1，否则保持原样
+const element = document.getElementById('tab' + newTitle);
+        if (element) {
+            element.innerHTML = html;
+        } else {
+            console.error('找不到ID为tab'+title+'的元素');
+        }
+    }
+}
+
+// 选项卡切换功能
+document.addEventListener('DOMContentLoaded', function() {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // 移除所有活动状态
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // 添加当前活动状态
+            button.classList.add('active');
+            const tabId = button.getAttribute('data-tab');
+            const count = button.getAttribute('data-count');
+            getNewspaperDetail(count);
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
 });

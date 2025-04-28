@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/calendar.css">
     <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="css/news.css">
 </head>
 
 <body>
@@ -23,6 +24,10 @@
         <button id="settings-index-btn" title="编辑昵称导航文案设置按钮" style="top: 100px;">
             <!-- 假设使用 Font Awesome 的设置图标 -->
             <i class="fas fa-bars"></i>
+        </button>
+        <button id="newspaper-btn" title="资讯按钮" style="top: 140px;">
+            <!-- 假设使用 Font Awesome 的设置图标 -->
+            <i class="fa fa-paw" aria-hidden="true"></i>
         </button>
 
         <!-- 主题切换按钮 -->
@@ -237,9 +242,39 @@
         <textarea id="index-json" rows="20" cols="100"></textarea>
         <button id="save-index-button">保存</button>
     </div>
+        <!-- 资讯详情 -->
+        <div id="newspaper-details"
+        style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">
+        <span class="close"><img src="images/close.png" alt="关闭" style="width: 20px; height: 20px;" /></span>
+        <h2>资讯</h2>
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-button active" data-tab="tab1" data-count="0">知乎</button>
+                <button class="tab-button" data-tab="tab2" data-count="1">微博</button>
+                <button class="tab-button" data-tab="tab3" data-count="2">头条</button>
+                <button class="tab-button" data-tab="tab4" data-count="3">澎湃</button>
+                <button class="tab-button" data-tab="tab5" data-count="4">虎扑</button>
+                <button class="tab-button" data-tab="tab6" data-count="5">知乎日报</button>
+                <button class="tab-button" data-tab="tab7" data-count="6">36Ke</button>
+                <button class="tab-button" data-tab="tab8" data-count="7">虎嗅</button>
+                <button class="tab-button" data-tab="tab9" data-count="8">IT之家</button>
+                <button class="tab-button" data-tab="tab10" data-count="9">人人都是产品经理</button>
+            </div>
+            <div class="tab-content active" id="tab1"></div>
+            <div class="tab-content" id="tab2"></div>
+            <div class="tab-content" id="tab3"></div>
+            <div class="tab-content" id="tab4"></div>
+            <div class="tab-content" id="tab5"></div>
+            <div class="tab-content" id="tab6"></div>
+            <div class="tab-content" id="tab7"></div>
+            <div class="tab-content" id="tab8"></div>
+            <div class="tab-content" id="tab9"></div>
+            <div class="tab-content" id="tab10"></div>
+        </div>
+    </div>
     <!-- 加载中 -->
     <div id="modal-all"
-        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999;">
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999;">
         <i class="fa fa-spinner fa-pulse fa-3x fa-fw loading-all"></i>
         <span class="loading-all" style="margin-top: 50px;">加载中...</span>
     </div>

@@ -482,6 +482,49 @@ body {
     color: brown;
 }
 
+/* 选项卡样式 */
+.tab-container {
+    width: 768px;
+    margin-top: 20px;
+    height: 500px;
+}
+
+.tab-buttons {
+    display: flex;
+    border-bottom: 1px solid var(--bg-300);
+}
+
+.tab-button {
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-100);
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+    color: var(--primary-100);
+}
+
+.tab-button.active {
+    color: var(--primary-100);
+    border-bottom: 2px solid var(--primary-100);
+}
+
+.tab-content {
+    display: none;
+    padding: 15px 0;
+    height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.tab-content.active {
+    display: block;
+}
+
 /* 主题切换按钮样式 */
 .fullscreen-toggle,
 .theme-toggle {
@@ -583,7 +626,7 @@ model-viewer {
     opacity: 0.7;
 }
 
-#settings-btn {
+#newspaper-btn,#settings-btn {
     position: fixed;
     top: 20px;
     left: 20px;
@@ -597,7 +640,7 @@ model-viewer {
     cursor: pointer;
 }
 
-#settings-btn:hover {
+#newspaper-btn:hover,#settings-btn:hover {
     background: var(--bg-300);
 }
 
@@ -1069,6 +1112,7 @@ model-viewer {
     color: brown;
 }
 
+
 /* 主题切换按钮样式 */
 .theme-toggle {
     position: fixed;
@@ -1270,6 +1314,7 @@ model-viewer {
     background: var(--bg-300);
 }
 
+#newspaper-details,
 #holiday-work-editor,
 #index-editor {
     display: none;
@@ -1283,8 +1328,8 @@ model-viewer {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     z-index: 1000;
 }
-
-#index-editor,
+#newspaper-details h2,
+#index-editor h2,
 #holiday-work-editor h2 {
     margin-top: 0;
     color: var(--text-100);
