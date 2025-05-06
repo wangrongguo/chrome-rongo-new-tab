@@ -29,7 +29,9 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(180deg, #e0f7fa 0%, #f9fbe7 100%);
+    font-family: 'ZCOOL KuaiLe', 'Comic Sans MS', 'Arial', sans-serif;
+    transition: background 0.8s cubic-bezier(.77,0,.18,1);
     background-color: var(--bg-100);
     min-height: 100vh;
     display: flex;
@@ -133,7 +135,7 @@ body {
 }
 
 .clock {
-    font-size: 2.7em;
+    font-size: 2.5em;
     width: 100%;
     font-weight: 900;
 }
@@ -515,10 +517,16 @@ body {
 
 .tab-content {
     display: none;
-    padding: 15px 0;
+    padding: 15px 0 60px 0;
     height: 400px;
-    overflow-y: auto;
+    overflow-y: scroll;
     overflow-x: hidden;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.tab-content::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
 }
 
 .tab-content.active {

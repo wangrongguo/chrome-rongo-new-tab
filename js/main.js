@@ -1022,7 +1022,7 @@ function showNotification(message, type) {
 }
 
 // 全屏功能实现
-document.querySelector('.fullscreen-toggle').addEventListener('click', function() {
+document.querySelector('.fullscreen-toggle').addEventListener('click', function () {
     if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(err => {
             console.error('全屏错误:', err);
@@ -1052,17 +1052,17 @@ function getNewspaperDetail(icount_url) {
         'https://api.vvhan.com/api/hotlist/itNews',
         'https://api.vvhan.com/api/hotlist/woShiPm'
     ];
-    
+
     // 新闻源对应的标题
     const vvhan_title = [
-        '知乎', '微博', '头条', '澎湃', '虎扑', 
+        '知乎', '微博', '头条', '澎湃', '虎扑',
         '知乎日报', '36Ke', '虎嗅', 'IT之家', '人人都是产品经理'
     ];
 
     try {
         // 随机选择一个新闻源
         // const icount_url = Math.floor(Math.random() * vvhan_url.length);
-        
+
         fetch(vvhan_url[icount_url])
             .then(response => {
                 if (!response.ok) {
@@ -1074,10 +1074,10 @@ function getNewspaperDetail(icount_url) {
                 if (!data || !data.data) {
                     throw new Error('无效的API响应');
                 }
-                
+
                 // 生成新闻列表HTML
                 const weiboHtml = generateNewsHtml(data.data);
-                
+
                 // 更新DOM
                 updateNewsDisplay(weiboHtml, icount_url);
             })
@@ -1103,10 +1103,10 @@ function getNewspaperDetail(icount_url) {
  */
 function generateNewsHtml(newsData) {
     return newsData.reduce((html, item) => {
-        const truncatedTitle = item.title.length > 70 
-            ? item.title.slice(0, 70) + '...' 
+        const truncatedTitle = item.title.length > 40
+            ? item.title.slice(0, 40) + '...'
             : item.title;
-            
+
         return html + `<div class="news-item">
             <span class="news-index">${item.index}.</span>
             <a class="news-link" title="${item.title}" 
@@ -1123,28 +1123,28 @@ function generateNewsHtml(newsData) {
 function updateNewsDisplay(html, title) {
     console.log(html, title);
     if (html) {
-const parsedTitle = parseInt(title, 10); // 将 title 转换为数字
-const newTitle = isNaN(parsedTitle) ? title : parsedTitle + 1; // 如果转换成功则加 1，否则保持原样
-const element = document.getElementById('tab' + newTitle);
+        const parsedTitle = parseInt(title, 10); // 将 title 转换为数字
+        const newTitle = isNaN(parsedTitle) ? title : parsedTitle + 1; // 如果转换成功则加 1，否则保持原样
+        const element = document.getElementById('tab' + newTitle);
         if (element) {
             element.innerHTML = html;
         } else {
-            console.error('找不到ID为tab'+title+'的元素');
+            console.error('找不到ID为tab' + title + '的元素');
         }
     }
 }
 
 // 选项卡切换功能
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const tabButtons = document.querySelectorAll('.tab-button');
     const tabContents = document.querySelectorAll('.tab-content');
-    
+
     tabButtons.forEach(button => {
         button.addEventListener('click', () => {
             // 移除所有活动状态
             tabButtons.forEach(btn => btn.classList.remove('active'));
             tabContents.forEach(content => content.classList.remove('active'));
-            
+
             // 添加当前活动状态
             button.classList.add('active');
             const tabId = button.getAttribute('data-tab');
