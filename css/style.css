@@ -29,7 +29,6 @@
 body {
     margin: 0;
     padding: 0;
-    background: linear-gradient(180deg, #e0f7fa 0%, #f9fbe7 100%);
     font-family: 'ZCOOL KuaiLe', 'Comic Sans MS', 'Arial', sans-serif;
     transition: background 0.8s cubic-bezier(.77,0,.18,1);
     background-color: var(--bg-100);
@@ -41,7 +40,7 @@ body {
 
 /* 主容器样式 */
 .container {
-    max-height: 666px;
+    max-height: 720px;
     background: var(--bg-100);
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -98,7 +97,10 @@ body {
     padding: 8px 0;
     font-size: 0.75em;
 }
-
+.nav-item:hover {
+    transform: translateY(-3px) rotate(1deg);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
 .nav-icon {
     width: 28px;
     height: 28px;
@@ -165,7 +167,10 @@ body {
     margin-bottom: 8px;
     display: none;
 }
-
+.holiday-card:hover {
+    transform: translateY(-3px) rotate(1deg);
+    box-shadow: 0 6px 15px #B87F5D;
+}
 .holiday-icon {
     width: 28px;
     height: 28px;
@@ -885,6 +890,10 @@ model-viewer {
         accent-color: var(--primary-100);
         outline: 2px solid var(--primary-200);
     }
+}
+.schedule-item:hover {
+    transform: translateY(-3px) rotate(1deg);
+    box-shadow: 0 6px 15px var(--bg-200);
 }
 
 .schedule-item .note-text {

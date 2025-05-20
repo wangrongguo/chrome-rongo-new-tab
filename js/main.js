@@ -316,7 +316,7 @@ function updateWeatherInfo(weatherData, suffix = '') {
  */
 async function fetchWeather() {
     try {
-        const response = await fetch('https://devapi.qweather.com/v7/weather/7d?location=101010100&key=a09a9fa8494440839cdc4c824b6e002d');
+        const response = await fetch('https://devapi.qweather.com/v7/weather/7d?location=101010100&key=8edfca07f6ee4946be6620bbdf90dd1e');
         const data = await response.json();
 
         if (data.code === '200') {
